@@ -5,3 +5,4 @@ mongoose.connect("mongodb://localhost:27017/review_app").then(() => {
 }).catch((ex)=> {
     console.log("db is connected failed: ", ex);
 })
+  
