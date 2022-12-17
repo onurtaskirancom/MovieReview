@@ -45,9 +45,9 @@ exports.create = async (req, res) => {
     to: newUser.email,
     subject: "Email Verification",
     html: `
-        <p>You verification OTP</p>
-        <h1>${OTP}</h1>
-      `,
+      <p>You verification OTP</p>
+      <h1>${OTP}</h1>
+    `,
   });
 
   res
@@ -70,4 +70,30 @@ exports.verifyEmail = async (req, res) => {
 
   const token = await EmailVerificationToken.findOne({ owner: userId });
   if (!token) return res.json({ error: "token not found!" });
+
+  const isMatched = await token.compareToken(OTP);
+  if (!isMatched) return res.json({ error: "Please submit a valid OTP!" });
+
+  user.isVerified = true;
+  await user.save();
+
+  await EmailVerificationToken.findByIdAndDelete(token._id);
+
+  var transport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "bf207d4e61cd81",
+      pass: "d8c74c2133f6b0",
+    },
+  });
+
+  transport.sendMail({
+    from: "verification@reviewapp.com",
+    to: user.email,
+    subject: "Welcome Email",
+    html: "<h1>Welcome to our app and thanks for choosing us.</h1>",
+  });
+
+  res.json({ message: "Your email is verified." });
 };
