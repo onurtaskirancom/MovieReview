@@ -30,3 +30,8 @@ exports.validatePassword = [
         .isLength({ min: 8, max: 20 })
         .withMessage("Password must be 8 to 20 characters long!"),
 ];
+
+exports.signInValidator = [
+    check("email").normalizeEmail().isEmail().withMessage("Email is invalid!"),
+    check("password").trim().not().isEmpty().withMessage("Password is missing!"),
+];
