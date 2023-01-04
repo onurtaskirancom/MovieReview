@@ -1,5 +1,6 @@
 import React from "react";
 import Container from "../Container";
+import CustomLink from "../CustomLink";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
@@ -12,21 +13,11 @@ export default function Signin() {
           <Title>Sign in</Title>
           <FormInput label="Email" placeholder="john@email.com" name="email" />
           <FormInput label="Password" placeholder="********" name="password" />
-          <Submit value="Sign in" />
+          <Submit />
 
           <div className="flex justify-between">
-            <a
-              className="text-dark-subtle hover:text-white transition"
-              href="#"
-            >
-              Forget password
-            </a>
-            <a
-              className="text-dark-subtle hover:text-white transition"
-              href="#"
-            >
-              Sign up
-            </a>
+            <CustomLink to="/auth/forget-password">Forget password</CustomLink>
+            <CustomLink to="/auth/signup">Sign up</CustomLink>
           </div>
         </form>
       </Container>
