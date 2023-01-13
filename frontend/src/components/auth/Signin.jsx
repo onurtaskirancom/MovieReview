@@ -1,4 +1,5 @@
 import React from "react";
+import { useTheme } from "../../hooks";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
 import FormInput from "../form/FormInput";
@@ -6,6 +7,9 @@ import Submit from "../form/Submit";
 import Title from "../form/Title";
 
 export default function Signin() {
+  const theme = useTheme();
+  theme.method();
+
   return (
     <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
       <Container>
@@ -13,7 +17,7 @@ export default function Signin() {
           <Title>Sign in</Title>
           <FormInput label="Email" placeholder="john@email.com" name="email" />
           <FormInput label="Password" placeholder="********" name="password" />
-          <Submit />
+          <Submit value="Sign in" />
 
           <div className="flex justify-between">
             <CustomLink to="/auth/forget-password">Forget password</CustomLink>
