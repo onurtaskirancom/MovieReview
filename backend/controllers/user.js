@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const EmailVerificationToken = require("../models/emailVerificationToken");
 const { isValidObjectId } = require("mongoose");
 const { generateOTP, generateMailTransporter } = require("../utils/mail");
-const { sendError } = require("../utils/helper");
+const { sendError, generateRandomByte } = require("../utils/helper");
 const PasswordResetToken = require("../models/passwordResetToken");
 
 exports.create = async (req, res) => {
@@ -41,12 +41,13 @@ exports.create = async (req, res) => {
     `,
   });
 
-  res
-    .status(201)
-    .json({
-      message:
-        "Please verify you email. OTP has been sent to your email account!",
-    });
+  res.status(201).json({
+    user: {
+      id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+    },
+  });
 };
 
 exports.verifyEmail = async (req, res) => {
@@ -170,8 +171,8 @@ exports.forgetPassword = async (req, res) => {
 };
 
 exports.sendResetPasswordTokenStatus = (req, res) => {
-  res.json({ valid: true })
-}
+  res.json({ valid: true });
+};
 
 exports.resetPassword = async (req, res) => {
   const { newPassword, userId } = req.body;
@@ -205,9 +206,9 @@ exports.resetPassword = async (req, res) => {
   res.json({
     message: "Password reset successfully, now you can use new password.",
   });
-}
+};
 
-exports.signIn = async (req, res,) => {
+exports.signIn = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
