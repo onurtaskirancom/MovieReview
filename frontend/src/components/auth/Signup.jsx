@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api/auth";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
@@ -32,6 +33,8 @@ export default function Signup() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setUserInfo({ ...userInfo, [name]: value });
@@ -45,7 +48,11 @@ export default function Signup() {
 
     const response = await createUser(userInfo);
     if (response.error) return console.log(response.error);
-    console.log(response.user);
+
+    navigate("/auth/verification", {
+      state: { user: response.user },
+      replace: true,
+    });
   };
 
   const { name, email, password } = userInfo;
