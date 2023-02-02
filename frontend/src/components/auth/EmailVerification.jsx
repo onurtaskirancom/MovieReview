@@ -66,7 +66,7 @@ export default function EmailVerification() {
     e.preventDefault();
 
     if (!isValidOTP(otp)) {
-      return console.log("invalid OTP");
+      return updateNotification("error", "invalid OTP");
     }
 
     // submit otp
