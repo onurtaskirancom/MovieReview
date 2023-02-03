@@ -3,18 +3,15 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
-import ThemeProvider from "./context/ThemeProvider";
-import NotificationProvider from "./context/NotificationProvider";
+import ContextProviders from "./context";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <BrowserRouter>
-    <NotificationProvider>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </NotificationProvider>
+    <ContextProviders>
+      <App />
+    </ContextProviders>
   </BrowserRouter>
 );
