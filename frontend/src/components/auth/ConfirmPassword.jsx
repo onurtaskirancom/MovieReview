@@ -7,7 +7,7 @@ import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
-import { verifyPasswordResetToken } from "../../api/auth";
+import { resetPassword, verifyPasswordResetToken } from "../../api/auth";
 import { useNotification } from "../../hooks";
 
 export default function ConfirmPassword() {
@@ -61,6 +61,17 @@ export default function ConfirmPassword() {
 
     if (password.one !== password.two)
       return updateNotification("error", "Password do not match!");
+
+    const { error, message } = await resetPassword({
+      newPassword: password.one,
+      userId: id,
+      token,
+    });
+
+    if (error) return updateNotification("error", error);
+
+    updateNotification("success", message);
+    navigate("/auth/signin", { replace: true });
   };
 
   if (isVerifying)
