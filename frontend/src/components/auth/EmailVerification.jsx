@@ -27,7 +27,8 @@ export default function EmailVerification() {
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
 
   const { isAuth, authInfo } = useAuth();
-  const { isLoggedIn } = authInfo;
+  const { isLoggedIn, profile } = authInfo;
+  const isVerified = profile?.isVerified;
 
   const inputRef = useRef();
   const { updateNotification } = useNotification();
@@ -94,7 +95,7 @@ export default function EmailVerification() {
 
   useEffect(() => {
     if (!user) navigate("/not-found");
-    if (isLoggedIn) navigate("/");
+    if (isLoggedIn && isVerified) navigate("/");
   }, [user, isLoggedIn]);
 
   // if(!user) return null
