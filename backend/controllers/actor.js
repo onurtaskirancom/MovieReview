@@ -1,7 +1,7 @@
-const { isValidObjectId } = require("mongoose");
-const Actor = require("../models/actor");
-const { sendError } = require("../utils/helper");
-const cloudinary = require("cloudinary").v2;
+const { isValidObjectId } = require('mongoose');
+const Actor = require('../models/actor');
+const { sendError } = require('../utils/helper');
+const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -19,7 +19,7 @@ exports.createActor = async (req, res) => {
   if (file) {
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       file.path,
-      { gravity: "face", height: 500, width: 500, crop: "thumb" }
+      { gravity: 'face', height: 500, width: 500, crop: 'thumb' }
     );
     newActor.avatar = { url: secure_url, public_id };
   }
@@ -43,18 +43,18 @@ exports.updateActor = async (req, res) => {
   const { file } = req;
   const { actorId } = req.params;
 
-  if (!isValidObjectId(actorId)) return sendError(res, "Invalid request!");
+  if (!isValidObjectId(actorId)) return sendError(res, 'Invalid request!');
 
   const actor = await Actor.findById(actorId);
-  if (!actor) return sendError(res, "Invalid request, record not found!");
+  if (!actor) return sendError(res, 'Invalid request, record not found!');
 
   const public_id = actor.avatar?.public_id;
 
   // remove old image if there was one!
   if (public_id && file) {
     const { result } = await cloudinary.uploader.destroy(public_id);
-    if (result !== "ok") {
-      return sendError(res, "Could not remove image from cloud!");
+    if (result !== 'ok') {
+      return sendError(res, 'Could not remove image from cloud!');
     }
   }
 
@@ -62,7 +62,7 @@ exports.updateActor = async (req, res) => {
   if (file) {
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       file.path,
-      { gravity: "face", height: 500, width: 500, crop: "thumb" }
+      { gravity: 'face', height: 500, width: 500, crop: 'thumb' }
     );
     actor.avatar = { url: secure_url, public_id };
   }
@@ -80,4 +80,27 @@ exports.updateActor = async (req, res) => {
     gender,
     avatar: actor.avatar?.url,
   });
+};
+
+exports.removeActor = async (req, res) => {
+  const { actorId } = req.params;
+
+  if (!isValidObjectId(actorId)) return sendError(res, 'Invalid request!');
+
+  const actor = await Actor.findById(actorId);
+  if (!actor) return sendError(res, 'Invalid request, record not found!');
+
+  const public_id = actor.avatar?.public_id;
+
+  // remove old image if there was one!
+  if (public_id) {
+    const { result } = await cloudinary.uploader.destroy(public_id);
+    if (result !== 'ok') {
+      return sendError(res, 'Could not remove image from cloud!');
+    }
+  }
+
+  await Actor.findByIdAndDelete(actorId);
+
+  res.json({ message: 'Record removed successfully.'});
 };
