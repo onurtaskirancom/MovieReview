@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const actorSchema = mongoose.Schema(
   {
@@ -26,4 +26,6 @@ const actorSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Actor", actorSchema);
+actorSchema.index({ name: 'text' });
+
+module.exports = mongoose.model('Actor', actorSchema);
