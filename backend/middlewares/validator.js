@@ -63,6 +63,8 @@ exports.validateMovie = [
       for (let g of value) {
         if (!genres.includes(g)) throw Error('Invalid genres!');
       }
+
+      return true;
     }),
   check('tags')
     .isArray({ min: 1 })
@@ -72,6 +74,8 @@ exports.validateMovie = [
         if (typeof tag !== 'string')
           throw Error('Tags must be an array of strings!');
       }
+
+      return true;
     }),
   check('cast')
     .isArray()
@@ -85,6 +89,8 @@ exports.validateMovie = [
             'Only accepted boolean value inside leadActor inside cast!'
           );
       }
+
+      return true;
     }),
   check('trailerInfo')
     .isObject()
@@ -100,12 +106,16 @@ exports.validateMovie = [
 
         if (public_id !== publicId)
           throw Error('Trailer public_id is invalid!');
+
+        return true;
       } catch (error) {
         throw Error('Trailer url is invalid!');
       }
     }),
   check('poster').custom((_, { req }) => {
     if (!req.file) throw Error('Poster file is missing!');
+
+    return true;
   }),
 ];
 
