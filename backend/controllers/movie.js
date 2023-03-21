@@ -101,3 +101,5 @@ exports.createMovie = async (req, res) => {
     },
   });
 };
+
+exports.updateMovieWithoutPoster = async (req, res) => {};
