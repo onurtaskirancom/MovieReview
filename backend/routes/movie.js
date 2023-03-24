@@ -3,6 +3,7 @@ const {
   uploadTrailer,
   createMovie,
   updateMovieWithoutPoster,
+  updateMovieWithPoster,
 } = require('../controllers/movie');
 const { isAuth, isAdmin } = require('../middlewares/auth');
 const { uploadVideo, uploadImage } = require('../middlewares/multer');
@@ -35,6 +36,16 @@ router.patch(
   validateMovie,
   validate,
   updateMovieWithoutPoster
+);
+router.patch(
+  '/update-movie-with-poster/:movieId',
+  isAuth,
+  isAdmin,
+  uploadImage.single('poster'),
+  parseData,
+  validateMovie,
+  validate,
+  updateMovieWithPoster
 );
 
 module.exports = router;
