@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 export default function Dashboard() {
@@ -12,23 +12,45 @@ export default function Dashboard() {
         placeholder="Search Movies..."
       />
       <button
-        onClick={() => setShowOptions(!showOptions)}
+        onClick={() => setShowOptions(true)}
         className="flex items-center space-x-2 border-secondary hover:border-primary text-secondary hover:opacity-80 transition font-semibold border-2 rounded text-lg px-3 py-1"
       >
         <span>Create</span>
         <AiOutlinePlus />
       </button>
 
-      <CreateOptions visible={showOptions} />
+      <CreateOptions
+        visible={showOptions}
+        onClose={() => setShowOptions(false)}
+      />
     </div>
   );
 }
 
-const CreateOptions = ({ visible }) => {
+const CreateOptions = ({ visible, onClose }) => {
+  const container = useRef();
+
+  useEffect(() => {
+    const handleClose = (e) => {
+      if (!visible) return;
+
+      container.current.classList.remove('animate-scale');
+      container.current.classList.add('animate-scale-reverse');
+    };
+
+    document.addEventListener('click', handleClose);
+    return () => {
+      document.removeEventListener('click', handleClose);
+    };
+  }, [visible]);
+
   if (!visible) return null;
 
   return (
-    <div className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale">
+    <div
+      ref={container}
+      className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
+    >
       <Option>Add Movie</Option>
       <Option>Add Actor</Option>
     </div>
