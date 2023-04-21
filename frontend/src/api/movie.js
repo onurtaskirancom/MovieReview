@@ -1,12 +1,12 @@
-"import client from "./client";
+import client from './client';
 
 export const uploadTrailer = async (formData) => {
-  const token = localStorage.getItem("auth-token");
+  const token = localStorage.getItem('auth-token');
   try {
-    const { data } = await client.post("/movie/upload-trailer", formData, {
+    const { data } = await client.post('/movie/upload-trailer', formData, {
       headers: {
-        authorization: "Bearer " + token,
-        "content-type": "multipart/form-data",
+        authorization: 'Bearer ' + token,
+        'content-type': 'multipart/form-data',
       },
     });
     return data;
