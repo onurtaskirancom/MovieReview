@@ -36,7 +36,7 @@ export default function TagsInput() {
     <div>
       <div
         onKeyDown={handleKeyDown}
-        className="border-2 bg-transparent dark:border-dark-subtle border-light-subtle px-2 h-10 rounded w-full text-white flex items-center space-x-2"
+        className="border-2 bg-transparent dark:border-dark-subtle border-light-subtle px-2 h-10 rounded w-full text-white flex items-center space-x-2 overflow-x-auto custom-scroll-bar"
       >
         {tags.map((t) => (
           <Tag onClick={() => removeTag(t)} key={t}>
@@ -57,7 +57,7 @@ export default function TagsInput() {
 
 const Tag = ({ children, onClick }) => {
   return (
-    <span className="dark:bg-white bg-primary dark:text-primary text-white flex items-center text-sm px-1">
+    <span className="dark:bg-white bg-primary dark:text-primary text-white flex items-center text-sm px-1 whitespace-nowrap">
       {children}
       <button onClick={onClick} type="button">
         <AiOutlineClose size={12} />
