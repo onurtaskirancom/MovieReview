@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { commonInputClasses } from '../utils/theme';
 
 export const results = [
@@ -22,6 +22,18 @@ export const results = [
   },
   {
     id: '4',
+    avatar:
+      'https://images.unsplash.com/photo-1564227901-6b1d20bebe9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80',
+    name: 'Edward Howell',
+  },
+  {
+    id: '5',
+    avatar:
+      'https://images.unsplash.com/photo-1578342976795-062a1b744f37?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80',
+    name: 'Amin RK',
+  },
+  {
+    id: '6',
     avatar:
       'https://images.unsplash.com/photo-1564227901-6b1d20bebe9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80',
     name: 'Edward Howell',
@@ -76,6 +88,15 @@ export default function LiveSearch() {
 }
 
 const SearchResults = ({ visible, results = [], focusedIndex }) => {
+  const resultContainer = useRef();
+
+  useEffect(() => {
+    resultContainer.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, [focusedIndex]);
+
   if (!visible) return null;
 
   return (
@@ -83,6 +104,7 @@ const SearchResults = ({ visible, results = [], focusedIndex }) => {
       {results.map(({ id, name, avatar }, index) => {
         return (
           <div
+            ref={index === focusedIndex ? resultContainer : null}
             key={id}
             className={
               (index === focusedIndex
