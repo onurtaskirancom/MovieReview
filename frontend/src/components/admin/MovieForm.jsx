@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { commonInputClasses } from '../../utils/theme';
 import LiveSearch from '../LiveSearch';
 import TagsInput from '../TagsInput';
@@ -42,7 +42,23 @@ export const results = [
   },
 ];
 
+const defaultMovieInfo = {
+  title: '',
+  storyLine: '',
+  tags: [],
+  cast: [],
+  director: {},
+  writers: [],
+  releseDate: '',
+  poster: null,
+  genres: [],
+  type: '',
+  language: '',
+  status: '',
+};
+
 export default function MovieForm() {
+  const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -56,6 +72,14 @@ export default function MovieForm() {
     );
   };
 
+  const handleChange = ({ target }) => {
+    const { value, name } = target;
+
+    setMovieInfo({ ...movieInfo, [name]: value });
+  };
+
+  const { title, storyLine, director } = movieInfo;
+
   return (
     <form onSubmit={handleSubmit} className="flex space-x-3">
       <div className="w-[70%] space-y-5">
@@ -63,6 +87,9 @@ export default function MovieForm() {
           <Label htmlFor="title">Title</Label>
           <input
             id="title"
+            value={title}
+            onChange={handleChange}
+            name="title"
             type="text"
             className={commonInputClasses + ' border-b-2 font-semibold text-xl'}
             placeholder="Titanic"
@@ -72,6 +99,9 @@ export default function MovieForm() {
         <div>
           <Label htmlFor="storyLine">Story line</Label>
           <textarea
+            value={storyLine}
+            onChange={handleChange}
+            name="storyLine"
             id="storyLine"
             className={commonInputClasses + ' border-b-2 resize-none h-24'}
             placeholder="Movie storyline..."
