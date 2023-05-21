@@ -5,6 +5,7 @@ export default function LiveSearch({
   value = '',
   placeholder = '',
   results = [],
+  name,
   resultContainerStyle,
   selectedResultStyle,
   inputStyle,
@@ -65,6 +66,8 @@ export default function LiveSearch({
     >
       <input
         type="text"
+        id={name}
+        name={name}
         className={getInputStyle()}
         placeholder={placeholder}
         onFocus={handleOnFocus}
