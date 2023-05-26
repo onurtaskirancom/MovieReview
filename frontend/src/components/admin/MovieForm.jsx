@@ -4,6 +4,7 @@ import { commonInputClasses } from '../../utils/theme';
 import Submit from '../form/Submit';
 import LiveSearch from '../LiveSearch';
 import ModalContainer from '../models/ModalContainer';
+import WritersModal from '../models/WritersModal';
 import TagsInput from '../TagsInput';
 
 export const results = [
@@ -62,7 +63,7 @@ const defaultMovieInfo = {
 
 export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
-  const [showModal, setShowModal] = useState(false);
+  const [showWritersModal, setShowWritersModal] = useState(false);
 
   const { updateNotification } = useNotification();
 
@@ -163,7 +164,7 @@ export default function MovieForm() {
                 Writers
               </LabelWithBadge>
               <button
-                onClick={() => setShowModal(true)}
+                onClick={() => setShowWritersModal(true)}
                 className="dark:text-white text-primary hover:underline transition"
               >
                 View All
@@ -184,9 +185,11 @@ export default function MovieForm() {
         <div className="w-[30%] h-5 bg-blue-400"></div>
       </form>
 
-      <ModalContainer onClose={() => setShowModal(false)} visible={showModal}>
-        <div className="p-20 bg-red-200"></div>
-      </ModalContainer>
+      <WritersModal
+        onClose={() => setShowWritersModal(false)}
+        visible={showWritersModal}
+        profiles={writers}
+      />
     </>
   );
 }
