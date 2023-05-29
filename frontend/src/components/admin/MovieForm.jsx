@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNotification } from '../../hooks';
 import { commonInputClasses } from '../../utils/theme';
+import CastForm from '../form/CastForm';
 import Submit from '../form/Submit';
 import LiveSearch from '../LiveSearch';
 import ModalContainer from '../models/ModalContainer';
@@ -46,6 +47,15 @@ export const results = [
   },
 ];
 
+export const renderItem = (result) => {
+  return (
+    <div className="flex rounded overflow-hidden">
+      <img src={result.avatar} alt="" className="w-16 h-16 object-cover" />
+      <p className="dark:text-white font-semibold">{result.name}</p>
+    </div>
+  );
+};
+
 const defaultMovieInfo = {
   title: '',
   storyLine: '',
@@ -70,15 +80,6 @@ export default function MovieForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(movieInfo);
-  };
-
-  const renderItem = (result) => {
-    return (
-      <div className="flex rounded overflow-hidden">
-        <img src={result.avatar} alt="" className="w-16 h-16 object-cover" />
-        <p className="dark:text-white font-semibold">{result.name}</p>
-      </div>
-    );
   };
 
   const handleChange = ({ target }) => {
@@ -194,6 +195,8 @@ export default function MovieForm() {
               value={director.name}
             />
           </div>
+
+          <CastForm />
 
           <Submit value="Upload" />
         </div>
