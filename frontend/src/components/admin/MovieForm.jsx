@@ -96,6 +96,11 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, director: profile });
   };
 
+  const updateCast = (castInfo) => {
+    const { cast } = movieInfo;
+    setMovieInfo({ ...movieInfo, cast: [...cast, castInfo] });
+  };
+
   const updateWriters = (profile) => {
     const { writers } = movieInfo;
     for (let writer of writers) {
@@ -196,7 +201,10 @@ export default function MovieForm() {
             />
           </div>
 
-          <CastForm />
+          <div>
+            <LabelWithBadge>Add Cast & Crew</LabelWithBadge>
+            <CastForm onSubmit={updateCast} />
+          </div>
 
           <Submit value="Upload" />
         </div>
