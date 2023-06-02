@@ -48,6 +48,7 @@ export default function CastForm({ onSubmit }) {
         className="w-4 h-4"
         checked={leadActor}
         onChange={handleOnChange}
+        title="Set as lead actor"
       />
       <LiveSearch
         placeholder="Search profile"

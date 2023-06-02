@@ -129,7 +129,7 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, writers: [...newWriters] });
   };
 
-  const { title, storyLine, director, writers } = movieInfo;
+  const { title, storyLine, director, writers, cast } = movieInfo;
 
   return (
     <>
@@ -184,12 +184,12 @@ export default function MovieForm() {
               <LabelWithBadge badge={writers.length} htmlFor="writers">
                 Writers
               </LabelWithBadge>
-              <button
+              <ViewAllBtn
                 onClick={displayWritersModal}
-                className="dark:text-white text-primary hover:underline transition"
+                visible={writers.length}
               >
                 View All
-              </button>
+              </ViewAllBtn>
             </div>
             <LiveSearch
               name="writers"
@@ -202,7 +202,12 @@ export default function MovieForm() {
           </div>
 
           <div>
-            <LabelWithBadge>Add Cast & Crew</LabelWithBadge>
+            <div className="flex justify-between">
+              <LabelWithBadge badge={cast.length}>
+                Add Cast & Crew
+              </LabelWithBadge>
+              <ViewAllBtn visible={cast.length}>View All</ViewAllBtn>
+            </div>
             <CastForm onSubmit={updateCast} />
           </div>
 
@@ -247,5 +252,17 @@ const LabelWithBadge = ({ children, htmlFor, badge = 0 }) => {
       <Label htmlFor={htmlFor}>{children}</Label>
       {renderBadge()}
     </div>
+  );
+};
+
+const ViewAllBtn = ({ visible, children, onClick }) => {
+  if (!visible) return null;
+  return (
+    <button
+      onClick={onClick}
+      className="dark:text-white text-primary hover:underline transition"
+    >
+      {children}
+    </button>
   );
 };
