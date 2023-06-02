@@ -4,6 +4,7 @@ import { commonInputClasses } from '../../utils/theme';
 import CastForm from '../form/CastForm';
 import Submit from '../form/Submit';
 import LiveSearch from '../LiveSearch';
+import CastModal from '../models/CastModal';
 import ModalContainer from '../models/ModalContainer';
 import WritersModal from '../models/WritersModal';
 import TagsInput from '../TagsInput';
@@ -74,6 +75,7 @@ const defaultMovieInfo = {
 export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
+  const [showCastModal, setShowCastModal] = useState(false);
 
   const { updateNotification } = useNotification();
 
@@ -120,6 +122,14 @@ export default function MovieForm() {
 
   const displayWritersModal = () => {
     setShowWritersModal(true);
+  };
+
+  const hideCastModal = () => {
+    setShowCastModal(false);
+  };
+
+  const displayCastModal = () => {
+    setShowCastModal(true);
   };
 
   const handleWriterRemove = (profileId) => {
@@ -206,7 +216,9 @@ export default function MovieForm() {
               <LabelWithBadge badge={cast.length}>
                 Add Cast & Crew
               </LabelWithBadge>
-              <ViewAllBtn visible={cast.length}>View All</ViewAllBtn>
+              <ViewAllBtn onClick={displayCastModal} visible={cast.length}>
+                View All
+              </ViewAllBtn>
             </div>
             <CastForm onSubmit={updateCast} />
           </div>
@@ -222,6 +234,8 @@ export default function MovieForm() {
         profiles={writers}
         onRemoveClick={handleWriterRemove}
       />
+
+      <CastModal onClose={hideCastModal} casts={cast} visible={showCastModal} />
     </>
   );
 }
