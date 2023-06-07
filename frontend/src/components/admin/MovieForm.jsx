@@ -146,7 +146,8 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
-  const { title, storyLine, director, writers, cast, tags } = movieInfo;
+  const { title, storyLine, director, writers, cast, tags, releseDate } =
+    movieInfo;
 
   return (
     <>
@@ -229,6 +230,14 @@ export default function MovieForm() {
             </div>
             <CastForm onSubmit={updateCast} />
           </div>
+
+          <input
+            type="date"
+            className={commonInputClasses + ' border-2 rounded p-1 w-auto'}
+            onChange={handleChange}
+            name="releseDate"
+            value={releseDate}
+          />
 
           <Submit value="Upload" onClick={handleSubmit} type="button" />
         </div>
