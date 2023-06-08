@@ -7,6 +7,7 @@ import LiveSearch from '../LiveSearch';
 import CastModal from '../models/CastModal';
 import ModalContainer from '../models/ModalContainer';
 import WritersModal from '../models/WritersModal';
+import PosterSelector from '../PosterSelector';
 import TagsInput from '../TagsInput';
 
 export const results = [
@@ -241,7 +242,9 @@ export default function MovieForm() {
 
           <Submit value="Upload" onClick={handleSubmit} type="button" />
         </div>
-        <div className="w-[30%] h-5 bg-blue-400"></div>
+        <div className="w-[30%]">
+          <PosterSelector />
+        </div>
       </div>
 
       <WritersModal
