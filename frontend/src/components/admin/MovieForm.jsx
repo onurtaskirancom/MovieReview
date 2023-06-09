@@ -3,6 +3,7 @@ import { useNotification } from '../../hooks';
 import { commonInputClasses } from '../../utils/theme';
 import CastForm from '../form/CastForm';
 import Submit from '../form/Submit';
+import GenresSelector from '../GenresSelector';
 import LiveSearch from '../LiveSearch';
 import CastModal from '../models/CastModal';
 import ModalContainer from '../models/ModalContainer';
@@ -253,13 +254,14 @@ export default function MovieForm() {
 
           <Submit value="Upload" onClick={handleSubmit} type="button" />
         </div>
-        <div className="w-[30%]">
+        <div className="w-[30%] space-y-5">
           <PosterSelector
             name="poster"
             onChange={handleChange}
             selectedPoster={selectedPosterForUI}
             accept="image/jpg, image/jpeg, image/png"
           />
+          <GenresSelector />
         </div>
       </div>
 
