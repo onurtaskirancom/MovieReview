@@ -118,6 +118,10 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, cast: [...cast, castInfo] });
   };
 
+  const updateGenres = (genres) => {
+    setMovieInfo({ ...movieInfo, genres });
+  };
+
   const updateWriters = (profile) => {
     const { writers } = movieInfo;
     for (let writer of writers) {
@@ -288,7 +292,11 @@ export default function MovieForm() {
         visible={showCastModal}
         onRemoveClick={handleCastRemove}
       />
-      <GenresModal visible={showGenresModal} onClose={hideGenresModal} />
+      <GenresModal
+        onSubmit={updateGenres}
+        visible={showGenresModal}
+        onClose={hideGenresModal}
+      />
     </>
   );
 }
