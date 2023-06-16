@@ -173,8 +173,16 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
-  const { title, storyLine, director, writers, cast, tags, releseDate } =
-    movieInfo;
+  const {
+    title,
+    storyLine,
+    director,
+    writers,
+    cast,
+    tags,
+    releseDate,
+    genres,
+  } = movieInfo;
 
   return (
     <>
@@ -275,7 +283,7 @@ export default function MovieForm() {
             selectedPoster={selectedPosterForUI}
             accept="image/jpg, image/jpeg, image/png"
           />
-          <GenresSelector onClick={displayGenresModal} />
+          <GenresSelector badge={genres.length} onClick={displayGenresModal} />
         </div>
       </div>
 
@@ -296,6 +304,7 @@ export default function MovieForm() {
         onSubmit={updateGenres}
         visible={showGenresModal}
         onClose={hideGenresModal}
+        previousSelection={genres}
       />
     </>
   );
