@@ -10,6 +10,7 @@ import GenresModal from '../models/GenresModal';
 import ModalContainer from '../models/ModalContainer';
 import WritersModal from '../models/WritersModal';
 import PosterSelector from '../PosterSelector';
+import Selector from '../Selector';
 import TagsInput from '../TagsInput';
 
 export const results = [
@@ -284,6 +285,10 @@ export default function MovieForm() {
             accept="image/jpg, image/jpeg, image/png"
           />
           <GenresSelector badge={genres.length} onClick={displayGenresModal} />
+
+          <Selector label="Type" />
+          <Selector label="Language" />
+          <Selector label="Status" />
         </div>
       </div>
 
