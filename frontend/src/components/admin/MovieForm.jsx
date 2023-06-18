@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { useNotification } from '../../hooks';
+import {
+  languageOptions,
+  statusOptions,
+  typeOptions,
+} from '../../utils/options';
 import { commonInputClasses } from '../../utils/theme';
 import CastForm from '../form/CastForm';
 import Submit from '../form/Submit';
@@ -286,9 +291,9 @@ export default function MovieForm() {
           />
           <GenresSelector badge={genres.length} onClick={displayGenresModal} />
 
-          <Selector label="Type" />
-          <Selector label="Language" />
-          <Selector label="Status" />
+          <Selector options={typeOptions} label="Type" />
+          <Selector options={languageOptions} label="Language" />
+          <Selector options={statusOptions} label="Status" />
         </div>
       </div>
 
