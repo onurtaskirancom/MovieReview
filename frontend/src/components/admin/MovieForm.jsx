@@ -188,6 +188,9 @@ export default function MovieForm() {
     tags,
     releseDate,
     genres,
+    type,
+    language,
+    status,
   } = movieInfo;
 
   return (
@@ -256,7 +259,6 @@ export default function MovieForm() {
               placeholder="Search profile"
               renderItem={renderItem}
               onSelect={updateWriters}
-              value={director.name}
             />
           </div>
 
@@ -291,9 +293,27 @@ export default function MovieForm() {
           />
           <GenresSelector badge={genres.length} onClick={displayGenresModal} />
 
-          <Selector options={typeOptions} label="Type" />
-          <Selector options={languageOptions} label="Language" />
-          <Selector options={statusOptions} label="Status" />
+          <Selector
+            onChange={handleChange}
+            name="type"
+            value={type}
+            options={typeOptions}
+            label="Type"
+          />
+          <Selector
+            onChange={handleChange}
+            name="language"
+            value={language}
+            options={languageOptions}
+            label="Language"
+          />
+          <Selector
+            onChange={handleChange}
+            name="status"
+            value={status}
+            options={statusOptions}
+            label="Status"
+          />
         </div>
       </div>
 
