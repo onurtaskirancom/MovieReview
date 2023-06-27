@@ -92,7 +92,11 @@ const CreateOptions = ({ options, visible, onClose }) => {
       }}
     >
       {options.map(({ title, onClick }) => {
-        return <Option onClick={() => handleClick(onClick)}>{title}</Option>;
+        return (
+          <Option key={title} onClick={() => handleClick(onClick)}>
+            {title}
+          </Option>
+        );
       })}
     </div>
   );
