@@ -4,8 +4,9 @@ import ActorForm from '../form/ActorForm';
 import ModalContainer from './ModalContainer';
 
 export default function ActorUpload({ visible, onClose }) {
-  const handleSubmit = (data) => {
-    createActor(data);
+  const handleSubmit = async (data) => {
+    const res = await createActor(data);
+    console.log(res);
   };
 
   return (
