@@ -1,19 +1,17 @@
-import client from "./client";
+import { catchError, getToken } from '../utils/helper';
+import client from './client';
 
 export const createActor = async (formData) => {
-  const token = localStorage.getItem("auth-token");
+  const token = getToken();
   try {
-    const { data } = await client.post("/actor/create", formData, {
+    const { data } = await client.post('/actor/create', formData, {
       headers: {
-        authorization: "Bearer " + token,
-        "content-type": "multipart/form-data",
+        authorization: 'Bearer ' + token,
+        'content-type': 'multipart/form-data',
       },
     });
     return data;
   } catch (error) {
-    const { response } = error;
-    if (response?.data) return response.data;
-
-    return { error: error.message || error };
+    return catchError(error);
   }
 };
