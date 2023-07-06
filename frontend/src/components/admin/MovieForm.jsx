@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNotification } from '../../hooks';
+import { searchActor } from '../../api/actor';
+import { useNotification, useSearch } from '../../hooks';
 import {
   languageOptions,
   statusOptions,
@@ -90,6 +91,8 @@ export default function MovieForm() {
 
   const { updateNotification } = useNotification();
 
+  const { handleSearch, results, resetSearch } = useSearch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(movieInfo);
@@ -117,6 +120,7 @@ export default function MovieForm() {
 
   const updateDirector = (profile) => {
     setMovieInfo({ ...movieInfo, director: profile });
+    resetSearch();
   };
 
   const updateCast = (castInfo) => {
@@ -179,6 +183,11 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
+  const handleProfileChange = ({ target }) => {
+    setMovieInfo({ ...movieInfo, director: { name: target.value } });
+    handleSearch(searchActor, target.value);
+  };
+
   const {
     title,
     storyLine,
@@ -238,6 +247,8 @@ export default function MovieForm() {
               renderItem={renderItem}
               onSelect={updateDirector}
               value={director.name}
+              onChange={handleProfileChange}
+              visible={results.length}
             />
           </div>
 

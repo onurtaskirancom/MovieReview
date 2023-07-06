@@ -1,5 +1,5 @@
-import React, { createContext, useState } from "react";
-import { useNotification } from "../hooks";
+import React, { createContext, useState } from 'react';
+import { useNotification } from '../hooks';
 
 export const SearchContext = createContext();
 
@@ -22,7 +22,7 @@ export default function SearchProvider({ children }) {
 
   const search = async (method, query) => {
     const { error, results } = await method(query);
-    if (error) return updateNotification("error", error);
+    if (error) return updateNotification('error', error);
 
     if (!results.length) return setResultNotFound(true);
 
@@ -34,17 +34,21 @@ export default function SearchProvider({ children }) {
   const handleSearch = (method, query) => {
     setSearching(true);
     if (!query.trim()) {
-      setSearching(false);
-      setResults([]);
-      setResultNotFound(false);
+      resetSearch();
     }
 
     debounceFunc(method, query);
   };
 
+  const resetSearch = () => {
+    setSearching(false);
+    setResults([]);
+    setResultNotFound(false);
+  };
+
   return (
     <SearchContext.Provider
-      value={{ handleSearch, searching, resultNotFound, results }}
+      value={{ handleSearch, resetSearch, searching, resultNotFound, results }}
     >
       {children}
     </SearchContext.Provider>
