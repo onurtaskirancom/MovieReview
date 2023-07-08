@@ -88,6 +88,7 @@ export default function MovieForm() {
   const [showCastModal, setShowCastModal] = useState(false);
   const [selectedPosterForUI, setSelectedPosterForUI] = useState('');
   const [showGenresModal, setShowGenresModal] = useState(false);
+  const [writerName, setWriterName] = useState('');
 
   const { updateNotification } = useNotification();
 
@@ -184,8 +185,12 @@ export default function MovieForm() {
   };
 
   const handleProfileChange = ({ target }) => {
-    setMovieInfo({ ...movieInfo, director: { name: target.value } });
-    handleSearch(searchActor, target.value);
+    const { name, value } = target;
+    if (name === 'director')
+      setMovieInfo({ ...movieInfo, director: { name: value } });
+    if (name === 'writers') setWriterName(value);
+
+    handleSearch(searchActor, value);
   };
 
   const {
@@ -270,6 +275,9 @@ export default function MovieForm() {
               placeholder="Search profile"
               renderItem={renderItem}
               onSelect={updateWriters}
+              onChange={handleProfileChange}
+              value={writerName}
+              visible={results.length}
             />
           </div>
 
