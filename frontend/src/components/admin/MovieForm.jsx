@@ -146,6 +146,7 @@ export default function MovieForm() {
       }
     }
     setMovieInfo({ ...movieInfo, writers: [...writers, profile] });
+    setWriterName('');
   };
 
   const hideWritersModal = () => {

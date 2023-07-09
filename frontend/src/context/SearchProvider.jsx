@@ -27,7 +27,7 @@ export default function SearchProvider({ children }) {
     if (!results.length) return setResultNotFound(true);
 
     setResults(results);
-    updaterFun([...results]);
+    updaterFun && updaterFun([...results]);
   };
 
   const debounceFunc = debounce(search, 300);
@@ -35,7 +35,7 @@ export default function SearchProvider({ children }) {
   const handleSearch = (method, query, updaterFun) => {
     setSearching(true);
     if (!query.trim()) {
-      updaterFun([]);
+      updaterFun && updaterFun([]);
       resetSearch();
     }
 
