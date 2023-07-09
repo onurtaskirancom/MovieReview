@@ -89,6 +89,8 @@ export default function MovieForm() {
   const [selectedPosterForUI, setSelectedPosterForUI] = useState('');
   const [showGenresModal, setShowGenresModal] = useState(false);
   const [writerName, setWriterName] = useState('');
+  const [writersProfile, setWritersProfile] = useState([]);
+  const [directorsProfile, setDirectorsProfile] = useState([]);
 
   const { updateNotification } = useNotification();
 
@@ -186,11 +188,14 @@ export default function MovieForm() {
 
   const handleProfileChange = ({ target }) => {
     const { name, value } = target;
-    if (name === 'director')
+    if (name === 'director') {
       setMovieInfo({ ...movieInfo, director: { name: value } });
-    if (name === 'writers') setWriterName(value);
-
-    handleSearch(searchActor, value);
+      handleSearch(searchActor, value, setDirectorsProfile);
+    }
+    if (name === 'writers') {
+      setWriterName(value);
+      handleSearch(searchActor, value, setWritersProfile);
+    }
   };
 
   const {
@@ -247,13 +252,13 @@ export default function MovieForm() {
             <Label htmlFor="director">Director</Label>
             <LiveSearch
               name="director"
-              results={results}
+              results={directorsProfile}
               placeholder="Search profile"
               renderItem={renderItem}
               onSelect={updateDirector}
               value={director.name}
               onChange={handleProfileChange}
-              visible={results.length}
+              visible={directorsProfile.length}
             />
           </div>
 
@@ -271,13 +276,13 @@ export default function MovieForm() {
             </div>
             <LiveSearch
               name="writers"
-              results={results}
+              results={writersProfile}
               placeholder="Search profile"
               renderItem={renderItem}
               onSelect={updateWriters}
               onChange={handleProfileChange}
               value={writerName}
-              visible={results.length}
+              visible={writersProfile.length}
             />
           </div>
 
