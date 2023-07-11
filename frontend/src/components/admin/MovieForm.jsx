@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { searchActor } from '../../api/actor';
 import { useNotification, useSearch } from '../../hooks';
+import { renderItem } from '../../utils/helper';
 import {
   languageOptions,
   statusOptions,
   typeOptions,
 } from '../../utils/options';
 import { commonInputClasses } from '../../utils/theme';
+import DirectorSelector from '../DirectorSelector';
 import CastForm from '../form/CastForm';
 import Submit from '../form/Submit';
 import GenresSelector from '../GenresSelector';
+import Label from '../Label';
 import LiveSearch from '../LiveSearch';
 import CastModal from '../models/CastModal';
 import GenresModal from '../models/GenresModal';
@@ -57,15 +60,6 @@ export const results = [
     name: 'Edward Howell',
   },
 ];
-
-export const renderItem = (result) => {
-  return (
-    <div className="flex rounded overflow-hidden">
-      <img src={result.avatar} alt="" className="w-16 h-16 object-cover" />
-      <p className="dark:text-white font-semibold">{result.name}</p>
-    </div>
-  );
-};
 
 const defaultMovieInfo = {
   title: '',
@@ -123,7 +117,6 @@ export default function MovieForm() {
 
   const updateDirector = (profile) => {
     setMovieInfo({ ...movieInfo, director: profile });
-    resetSearch();
   };
 
   const updateCast = (castInfo) => {
@@ -249,19 +242,7 @@ export default function MovieForm() {
             <TagsInput value={tags} name="tags" onChange={updateTags} />
           </div>
 
-          <div className="">
-            <Label htmlFor="director">Director</Label>
-            <LiveSearch
-              name="director"
-              results={directorsProfile}
-              placeholder="Search profile"
-              renderItem={renderItem}
-              onSelect={updateDirector}
-              value={director.name}
-              onChange={handleProfileChange}
-              visible={directorsProfile.length}
-            />
-          </div>
+          <DirectorSelector onSelect={updateDirector} />
 
           <div className="">
             <div className="flex justify-between">
@@ -365,17 +346,6 @@ export default function MovieForm() {
     </>
   );
 }
-
-const Label = ({ children, htmlFor }) => {
-  return (
-    <label
-      htmlFor={htmlFor}
-      className="dark:text-dark-subtle text-light-subtle font-semibold"
-    >
-      {children}
-    </label>
-  );
-};
 
 const LabelWithBadge = ({ children, htmlFor, badge = 0 }) => {
   const renderBadge = () => {
