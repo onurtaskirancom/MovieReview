@@ -62,6 +62,10 @@ export default function MovieUpload({ visible, onClose }) {
     return `Upload progress ${uploadProgress}%`;
   };
 
+  const handleSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <ModalContainer visible={visible}>
       {/* <UploadProgress
@@ -75,7 +79,7 @@ export default function MovieUpload({ visible, onClose }) {
           handleChange={handleChange}
         /> */}
 
-      <MovieForm />
+      <MovieForm onSubmit={handleSubmit} />
     </ModalContainer>
   );
 }
