@@ -11,24 +11,6 @@ export default function MovieUpload({ visible, onClose }) {
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [videoInfo, setVideoInfo] = useState({});
-  const [movieInfo, setMovieInfo] = useState({
-    title: '',
-    storyLine: '',
-    tags: [],
-    cast: [],
-    director: {},
-    writers: [],
-    releseDate: '',
-    poster: null,
-    genres: [],
-    type: '',
-    language: '',
-    status: '',
-    trailer: {
-      url: '',
-      public_id: '',
-    },
-  });
   const { updateNotification } = useNotification();
 
   const handleTypeError = (error) => {
@@ -63,21 +45,25 @@ export default function MovieUpload({ visible, onClose }) {
   };
 
   const handleSubmit = (data) => {
+    if (!videoInfo.url || !videoInfo.public_id)
+      return updateNotification('error', 'Trailer is missing!');
+
+    data.append('trailer', JSON.stringify(videoInfo));
     console.log(data);
   };
 
   return (
     <ModalContainer visible={visible}>
-      {/* <UploadProgress
-          visible={!videoUploaded && videoSelected}
-          message={getUploadProgressValue()}
-          width={uploadProgress}
-        />
-        <TrailerSelector
-          visible={!videoSelected}
-          onTypeError={handleTypeError}
-          handleChange={handleChange}
-        /> */}
+      <UploadProgress
+        visible={!videoUploaded && videoSelected}
+        message={getUploadProgressValue()}
+        width={uploadProgress}
+      />
+      <TrailerSelector
+        visible={!videoSelected}
+        onTypeError={handleTypeError}
+        handleChange={handleChange}
+      />
 
       <MovieForm onSubmit={handleSubmit} />
     </ModalContainer>
