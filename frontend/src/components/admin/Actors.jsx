@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import { getActors } from '../../api/actor';
+import { useNotification } from '../../hooks';
+
+let pageNo = 0;
+const limit = 20;
 
 export default function Actors() {
+  const [actors, setActors] = useState([]);
+  const { updateNotification } = useNotification();
+
   const fetchActors = async () => {
-    const res = await getActors(2, 5);
-    console.log(res);
+    const { profiles, error } = await getActors(pageNo, limit);
+    if (error) return updateNotification('error', error);
+
+    setActors([...profiles]);
   };
 
   useEffect(() => {
@@ -13,16 +22,10 @@ export default function Actors() {
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-3 my-5">
-      <ActorProfile
-        profile={{
-          name: 'John Doe',
-          about:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam dolorem quia blanditiis error! Facilis cumque optio vel temporibus voluptatibus vitae modi reiciendis laudantium perspiciatis consectetur sequi voluptas, error laborum architecto!',
-          avatar:
-            'https://images.unsplash.com/photo-1656217818549-c7078fe222b9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60',
-        }}
-      />
+    <div className="grid grid-cols-4 gap-5 p-5">
+      {actors.map((actor) => (
+        <ActorProfile profile={actor} key={actor.id} />
+      ))}
     </div>
   );
 }
