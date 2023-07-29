@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import { getActors } from '../../api/actor';
-import { useNotification } from '../../hooks';
+import React, { useEffect, useState } from "react";
+import { BsPencilSquare, BsTrash } from "react-icons/bs";
+import { getActors } from "../../api/actor";
+import { useNotification } from "../../hooks";
 
 let pageNo = 0;
 const limit = 20;
@@ -12,7 +12,7 @@ export default function Actors() {
 
   const fetchActors = async () => {
     const { profiles, error } = await getActors(pageNo, limit);
-    if (error) return updateNotification('error', error);
+    if (error) return updateNotification("error", error);
 
     setActors([...profiles]);
   };
@@ -22,10 +22,27 @@ export default function Actors() {
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-5 p-5">
-      {actors.map((actor) => (
-        <ActorProfile profile={actor} key={actor.id} />
-      ))}
+    <div className="p-5">
+      <div className="grid grid-cols-4 gap-5 p-5">
+        {actors.map((actor) => (
+          <ActorProfile profile={actor} key={actor.id} />
+        ))}
+      </div>
+
+      <div className="flex justify-end items-center space-x-3 mt-5">
+        <button
+          type="button"
+          className="text-primary dark:text-white hover:underline"
+        >
+          Prev
+        </button>
+        <button
+          type="button"
+          className="text-primary dark:text-white hover:underline"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
@@ -41,7 +58,7 @@ const ActorProfile = ({ profile }) => {
     setShowOptions(false);
   };
 
-  const { name, about = '', avatar } = profile;
+  const { name, about = "", avatar } = profile;
 
   if (!profile) return null;
 
