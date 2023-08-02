@@ -70,6 +70,7 @@ export default function Actors() {
 
 const ActorProfile = ({ profile }) => {
   const [showOptions, setShowOptions] = useState(false);
+  const acceptedNameLength = 15;
 
   const handleOnMouseEnter = () => {
     setShowOptions(true);
@@ -77,6 +78,12 @@ const ActorProfile = ({ profile }) => {
 
   const handleOnMouseLeave = () => {
     setShowOptions(false);
+  };
+
+  const getName = (name) => {
+    if (name.length <= acceptedNameLength) return name;
+
+    return name.substring(0, acceptedNameLength) + '..';
   };
 
   const { name, about = '', avatar } = profile;
@@ -97,8 +104,8 @@ const ActorProfile = ({ profile }) => {
         />
 
         <div className="px-2">
-          <h1 className="text-xl text-primary dark:text-white font-semibold">
-            {name}
+          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
+            {getName(name)}
           </h1>
           <p className="text-primary dark:text-white">
             {about.substring(0, 50)}
