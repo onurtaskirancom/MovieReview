@@ -32,6 +32,7 @@ export default function Actors() {
 
   const handleOnPrevClick = () => {
     if (currentPageNo <= 0) return;
+    if (reachedToEnd) setReachedToEnd(false);
 
     currentPageNo -= 1;
     fetchActors(currentPageNo);
@@ -97,7 +98,7 @@ const ActorProfile = ({ profile }) => {
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
             {getName(name)}
           </h1>
-          <p className="text-primary dark:text-white">
+          <p className="text-primary dark:text-white opacity-70">
             {about.substring(0, 50)}
           </p>
         </div>
