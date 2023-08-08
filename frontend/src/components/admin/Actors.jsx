@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import { getActors } from '../../api/actor';
 import { useNotification } from '../../hooks';
+import UpdateActor from '../models/UpdateActor';
 import NextAndPrevButton from '../NextAndPrevButton';
 
 let currentPageNo = 0;
@@ -10,6 +11,8 @@ const limit = 20;
 export default function Actors() {
   const [actors, setActors] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
   const { updateNotification } = useNotification();
 
   const fetchActors = async (pageNo) => {
@@ -39,7 +42,12 @@ export default function Actors() {
   };
 
   const handleOnEditClick = (profile) => {
-    console.log(profile);
+    setShowUpdateModal(true);
+    setSelectedProfile(profile);
+  };
+
+  const hideUpdateModal = () => {
+    setShowUpdateModal(false);
   };
 
   useEffect(() => {
@@ -47,23 +55,31 @@ export default function Actors() {
   }, []);
 
   return (
-    <div className="p-5">
-      <div className="grid grid-cols-4 gap-5 p-5">
-        {actors.map((actor) => (
-          <ActorProfile
-            onEditClick={() => handleOnEditClick(actor)}
-            profile={actor}
-            key={actor.id}
-          />
-        ))}
+    <>
+      <div className="p-5">
+        <div className="grid grid-cols-4 gap-5 p-5">
+          {actors.map((actor) => (
+            <ActorProfile
+              onEditClick={() => handleOnEditClick(actor)}
+              profile={actor}
+              key={actor.id}
+            />
+          ))}
+        </div>
+
+        <NextAndPrevButton
+          className="mt-5"
+          onNextClick={handleOnNextClick}
+          onPrevClick={handleOnPrevClick}
+        />
       </div>
 
-      <NextAndPrevButton
-        className="mt-5"
-        onNextClick={handleOnNextClick}
-        onPrevClick={handleOnPrevClick}
+      <UpdateActor
+        visible={showUpdateModal}
+        onClose={hideUpdateModal}
+        initialState={selectedProfile}
       />
-    </div>
+    </>
   );
 }
 
