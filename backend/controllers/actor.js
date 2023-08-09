@@ -58,7 +58,7 @@ exports.updateActor = async (req, res) => {
 
   await actor.save();
 
-  res.status(201).json(formatActor(actor));
+  res.status(201).json({ actor: formatActor(actor) });
 };
 
 exports.removeActor = async (req, res) => {
