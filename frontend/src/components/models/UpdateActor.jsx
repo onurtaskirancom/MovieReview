@@ -4,7 +4,12 @@ import { useNotification } from '../../hooks';
 import ActorForm from '../form/ActorForm';
 import ModalContainer from './ModalContainer';
 
-export default function UpdateActor({ visible, initialState, onClose }) {
+export default function UpdateActor({
+  visible,
+  initialState,
+  onSuccess,
+  onClose,
+}) {
   const [busy, setBusy] = useState(false);
 
   const { updateNotification } = useNotification();
@@ -14,6 +19,7 @@ export default function UpdateActor({ visible, initialState, onClose }) {
     const { error, actor } = await updateActor(initialState.id, data);
     setBusy(false);
     if (error) return updateNotification('error', error);
+    onSuccess(actor);
     updateNotification('success', 'Actor updated successfully.');
     onClose();
   };
