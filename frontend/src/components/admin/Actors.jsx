@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import { getActors } from '../../api/actor';
 import { useNotification } from '../../hooks';
+import AppSearchForm from '../form/AppSearchForm';
 import UpdateActor from '../models/UpdateActor';
 import NextAndPrevButton from '../NextAndPrevButton';
 
@@ -69,7 +70,10 @@ export default function Actors() {
   return (
     <>
       <div className="p-5">
-        <div className="grid grid-cols-4 gap-5 p-5">
+        <div className="flex justify-end mb-5">
+          <AppSearchForm placeholder="Search Actors..." />
+        </div>
+        <div className="grid grid-cols-4 gap-5">
           {actors.map((actor) => (
             <ActorProfile
               onEditClick={() => handleOnEditClick(actor)}
