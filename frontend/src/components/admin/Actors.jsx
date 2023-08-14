@@ -80,6 +80,7 @@ export default function Actors() {
           <AppSearchForm
             onSubmit={handleOnSearchSubmit}
             placeholder="Search Actors..."
+            showResetIcon={results.length}
           />
         </div>
         <div className="grid grid-cols-4 gap-5">
