@@ -16,7 +16,7 @@ export default function Actors() {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const { updateNotification } = useNotification();
-  const { handleSearch, resetSearch } = useSearch();
+  const { handleSearch, resetSearch, resultNotFound } = useSearch();
 
   const fetchActors = async (pageNo) => {
     const { profiles, error } = await getActors(pageNo, limit);
@@ -89,23 +89,29 @@ export default function Actors() {
             showResetIcon={results.length}
           />
         </div>
-        <div className="grid grid-cols-4 gap-5">
-          {results.length
-            ? results.map((actor) => (
-                <ActorProfile
-                  profile={actor}
-                  key={actor.id}
-                  onEditClick={() => handleOnEditClick(actor)}
-                />
-              ))
-            : actors.map((actor) => (
-                <ActorProfile
-                  profile={actor}
-                  key={actor.id}
-                  onEditClick={() => handleOnEditClick(actor)}
-                />
-              ))}
-        </div>
+        {resultNotFound ? (
+          <h1 className="font-semibold text-3xl text-secondary dark:text-white text-center py-5 opacity-40">
+            Record not found
+          </h1>
+        ) : (
+          <div className="grid grid-cols-4 gap-5">
+            {results.length
+              ? results.map((actor) => (
+                  <ActorProfile
+                    profile={actor}
+                    key={actor.id}
+                    onEditClick={() => handleOnEditClick(actor)}
+                  />
+                ))
+              : actors.map((actor) => (
+                  <ActorProfile
+                    profile={actor}
+                    key={actor.id}
+                    onEditClick={() => handleOnEditClick(actor)}
+                  />
+                ))}
+          </div>
+        )}
 
         {!results.length ? (
           <NextAndPrevButton
