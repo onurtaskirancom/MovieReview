@@ -3,6 +3,7 @@ import { BsPencilSquare, BsTrash } from 'react-icons/bs';
 import { getActors, searchActor } from '../../api/actor';
 import { useNotification, useSearch } from '../../hooks';
 import AppSearchForm from '../form/AppSearchForm';
+import ConfirmModal from '../models/ConfirmModal';
 import UpdateActor from '../models/UpdateActor';
 import NextAndPrevButton from '../NextAndPrevButton';
 import NotFoundText from '../NotFoundText';
@@ -15,6 +16,7 @@ export default function Actors() {
   const [results, setResults] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const { updateNotification } = useNotification();
   const { handleSearch, resetSearch, resultNotFound } = useSearch();
@@ -75,6 +77,11 @@ export default function Actors() {
     setActors([...updatedActors]);
   };
 
+  const handleOnDeleteClick = (profile) => {
+    console.log(profile);
+    setShowConfirmModal(true);
+  };
+
   useEffect(() => {
     fetchActors(currentPageNo);
   }, []);
@@ -99,6 +106,7 @@ export default function Actors() {
                   profile={actor}
                   key={actor.id}
                   onEditClick={() => handleOnEditClick(actor)}
+                  onDeleteClick={() => handleOnDeleteClick(actor)}
                 />
               ))
             : actors.map((actor) => (
@@ -106,6 +114,7 @@ export default function Actors() {
                   profile={actor}
                   key={actor.id}
                   onEditClick={() => handleOnEditClick(actor)}
+                  onDeleteClick={() => handleOnDeleteClick(actor)}
                 />
               ))}
         </div>
@@ -118,6 +127,12 @@ export default function Actors() {
           />
         ) : null}
       </div>
+
+      <ConfirmModal
+        visible={showConfirmModal}
+        title="Are you sure?"
+        subtitle="This action will remove this profile permanently!"
+      />
 
       <UpdateActor
         visible={showUpdateModal}
