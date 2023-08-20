@@ -39,6 +39,10 @@ export default function Movies() {
     fetchMovies(currentPageNo);
   };
 
+  const handleOnEditClick = (movie) => {
+    console.log(movie);
+  };
+
   useEffect(() => {
     fetchMovies(currentPageNo);
   }, []);
@@ -46,7 +50,13 @@ export default function Movies() {
   return (
     <div className="space-y-3 p-5">
       {movies.map((movie) => {
-        return <MovieListItem key={movie.id} movie={movie} />;
+        return (
+          <MovieListItem
+            key={movie.id}
+            movie={movie}
+            onEditClick={() => handleOnEditClick(movie)}
+          />
+        );
       })}
 
       <NextAndPrevButton
