@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getMovies } from '../../api/movie';
 import { useNotification } from '../../hooks';
+import UpdateMovie from '../models/UpdateMovie';
 import MovieListItem from '../MovieListItem';
 import NextAndPrevButton from '../NextAndPrevButton';
 
@@ -10,6 +11,7 @@ let currentPageNo = 0;
 export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   const { updateNotification } = useNotification();
 
@@ -41,6 +43,7 @@ export default function Movies() {
 
   const handleOnEditClick = (movie) => {
     console.log(movie);
+    setShowUpdateModal(true);
   };
 
   useEffect(() => {
@@ -48,22 +51,26 @@ export default function Movies() {
   }, []);
 
   return (
-    <div className="space-y-3 p-5">
-      {movies.map((movie) => {
-        return (
-          <MovieListItem
-            key={movie.id}
-            movie={movie}
-            onEditClick={() => handleOnEditClick(movie)}
-          />
-        );
-      })}
+    <>
+      <div className="space-y-3 p-5">
+        {movies.map((movie) => {
+          return (
+            <MovieListItem
+              key={movie.id}
+              movie={movie}
+              onEditClick={() => handleOnEditClick(movie)}
+            />
+          );
+        })}
 
-      <NextAndPrevButton
-        className="mt-5"
-        onNextClick={handleOnNextClick}
-        onPrevClick={handleOnPrevClick}
-      />
-    </div>
+        <NextAndPrevButton
+          className="mt-5"
+          onNextClick={handleOnNextClick}
+          onPrevClick={handleOnPrevClick}
+        />
+      </div>
+
+      <UpdateMovie visible={showUpdateModal} />
+    </>
   );
 }
