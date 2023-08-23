@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNotification } from '../../hooks';
 import {
   languageOptions,
@@ -37,7 +37,7 @@ const defaultMovieInfo = {
   status: '',
 };
 
-  export default function MovieForm({ busy, onSubmit }) {
+export default function MovieForm({ busy, initialState, onSubmit }) {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
   const [showCastModal, setShowCastModal] = useState(false);
@@ -173,6 +173,13 @@ const defaultMovieInfo = {
     if (!newCast.length) hideCastModal();
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
+
+  useEffect(() => {
+    if (initialState) {
+      setMovieInfo({ ...initialState, poster: null });
+      setSelectedPosterForUI(initialState.poster);
+    }
+  }, [initialState]);
 
   const {
     title,
