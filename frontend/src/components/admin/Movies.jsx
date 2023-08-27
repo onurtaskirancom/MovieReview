@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getMovieForUpdate, getMovies, updateMovie } from '../../api/movie';
 import { useNotification } from '../../hooks';
+import ConfirmModal from '../models/ConfirmModal';
 import UpdateMovie from '../models/UpdateMovie';
 import MovieListItem from '../MovieListItem';
 import NextAndPrevButton from '../NextAndPrevButton';
@@ -12,6 +13,7 @@ export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const { updateNotification } = useNotification();
@@ -49,6 +51,13 @@ export default function Movies() {
     setShowUpdateModal(true);
   };
 
+  const handleOnDeleteClick = (movie) => {
+    setSelectedMovie(movie);
+    setShowConfirmModal(true);
+  };
+
+  const handleOnDeleteConfirm = () => {};
+
   const handleOnUpdate = (movie) => {
     const updatedMovies = movies.map((m) => {
       if (m.id === movie.id) return movie;
@@ -59,6 +68,7 @@ export default function Movies() {
   };
 
   const hideUpdateForm = () => setShowUpdateModal(false);
+  const hideConfirmModal = () => setShowConfirmModal(false);
 
   useEffect(() => {
     fetchMovies(currentPageNo);
@@ -73,6 +83,7 @@ export default function Movies() {
               key={movie.id}
               movie={movie}
               onEditClick={() => handleOnEditClick(movie)}
+              onDeleteClick={() => handleOnDeleteClick(movie)}
             />
           );
         })}
@@ -83,6 +94,14 @@ export default function Movies() {
           onPrevClick={handleOnPrevClick}
         />
       </div>
+
+      <ConfirmModal
+        visible={showConfirmModal}
+        onCancel={hideConfirmModal}
+        onConfirm={handleOnDeleteConfirm}
+        title="Are you sure?"
+        subtitle="This action will remove this movie permanently!"
+      />
 
       <UpdateMovie
         visible={showUpdateModal}
