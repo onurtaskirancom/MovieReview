@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getMovieForUpdate, getMovies } from '../../api/movie';
+import { getMovieForUpdate, getMovies, updateMovie } from '../../api/movie';
 import { useNotification } from '../../hooks';
 import UpdateMovie from '../models/UpdateMovie';
 import MovieListItem from '../MovieListItem';
@@ -49,6 +49,17 @@ export default function Movies() {
     setShowUpdateModal(true);
   };
 
+  const handleOnUpdate = (movie) => {
+    const updatedMovies = movies.map((m) => {
+      if (m.id === movie.id) return movie;
+      return m;
+    });
+
+    setMovies([...updatedMovies]);
+  };
+
+  const hideUpdateForm = () => setShowUpdateModal(false);
+
   useEffect(() => {
     fetchMovies(currentPageNo);
   }, []);
@@ -73,7 +84,12 @@ export default function Movies() {
         />
       </div>
 
-      <UpdateMovie visible={showUpdateModal} initialState={selectedMovie} />
+      <UpdateMovie
+        visible={showUpdateModal}
+        initialState={selectedMovie}
+        onSuccess={handleOnUpdate}
+        onClose={hideUpdateForm}
+      />
     </>
   );
 }

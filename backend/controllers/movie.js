@@ -250,7 +250,16 @@ exports.updateMovie = async (req, res) => {
 
   await movie.save();
 
-  res.json({ message: 'Movie is updated', movie });
+  res.json({
+    message: 'Movie is updated',
+    movie: {
+      id: movie._id,
+      title: movie.title,
+      poster: movie.poster?.url,
+      genres: movie.genres,
+      status: movie.status,
+    },
+  });
 };
 
 exports.removeMovie = async (req, res) => {
