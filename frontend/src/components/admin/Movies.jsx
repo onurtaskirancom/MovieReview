@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getMovieForUpdate, getMovies, updateMovie } from '../../api/movie';
+import {
+  deleteMovie,
+  getMovieForUpdate,
+  getMovies,
+  updateMovie,
+} from '../../api/movie';
 import { useNotification } from '../../hooks';
 import ConfirmModal from '../models/ConfirmModal';
 import UpdateMovie from '../models/UpdateMovie';
@@ -12,6 +17,7 @@ let currentPageNo = 0;
 export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -56,7 +62,17 @@ export default function Movies() {
     setShowConfirmModal(true);
   };
 
-  const handleOnDeleteConfirm = () => {};
+  const handleOnDeleteConfirm = async () => {
+    setBusy(true);
+    const { error, message } = await deleteMovie(selectedMovie.id);
+    setBusy(false);
+
+    if (error) return updateNotification('error', error);
+
+    updateNotification('success', message);
+    hideConfirmModal();
+    fetchMovies(currentPageNo);
+  };
 
   const handleOnUpdate = (movie) => {
     const updatedMovies = movies.map((m) => {
@@ -101,6 +117,7 @@ export default function Movies() {
         onConfirm={handleOnDeleteConfirm}
         title="Are you sure?"
         subtitle="This action will remove this movie permanently!"
+        busy={busy}
       />
 
       <UpdateMovie

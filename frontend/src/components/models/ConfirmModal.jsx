@@ -1,6 +1,6 @@
-import React from "react";
-import ModalContainer from "./ModalContainer";
-import { ImSpinner3 } from "react-icons/im";
+import React from 'react';
+import ModalContainer from './ModalContainer';
+import { ImSpinner3 } from 'react-icons/im';
 
 export default function ConfirmModal({
   visible,
@@ -10,7 +10,7 @@ export default function ConfirmModal({
   onConfirm,
   onCancel,
 }) {
-  const commonClass = "px-3 py-1 text-white rounded";
+  const commonClass = 'px-3 py-1 text-white rounded';
   return (
     <ModalContainer visible={visible} ignoreContainer>
       <div className="dark:bg-primary bg-white rounded p-3">
@@ -28,14 +28,14 @@ export default function ConfirmModal({
               <button
                 onClick={onConfirm}
                 type="button"
-                className={commonClass + " bg-red-400"}
+                className={commonClass + ' bg-red-400'}
               >
                 Confirm
               </button>
               <button
                 onClick={onCancel}
                 type="button"
-                className={commonClass + " bg-blue-400"}
+                className={commonClass + ' bg-blue-400'}
               >
                 Cancel
               </button>
