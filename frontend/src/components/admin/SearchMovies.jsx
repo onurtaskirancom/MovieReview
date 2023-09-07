@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { searchMovieForAdmin } from '../../api/movie';
+import { searchMovieForAdmin, updateMovie } from '../../api/movie';
 import { useNotification } from '../../hooks';
 import MovieListItem from '../MovieListItem';
+import NotFoundText from '../NotFoundText';
 
 export default function SearchMovies() {
   const [movies, setMovies] = useState([]);
+  const [resultNotFound, setResultNotFound] = useState(false);
 
   const [searchParams] = useSearchParams();
   const query = searchParams.get('title');
@@ -16,6 +18,12 @@ export default function SearchMovies() {
     const { error, results } = await searchMovieForAdmin(val);
     if (error) return updateNotification('error', error);
 
+    if (!results.length) {
+      setResultNotFound(true);
+      return setMovies([]);
+    }
+
+    setResultNotFound(false);
     setMovies([...results]);
   };
 
@@ -25,9 +33,11 @@ export default function SearchMovies() {
 
   return (
     <div className="p-5 space-y-3">
-      {movies.map((movie) => {
-        return <MovieListItem movie={movie} key={movie.id} />;
-      })}
+      <NotFoundText text="Record not found!" visible={resultNotFound} />
+      {!resultNotFound &&
+        movies.map((movie) => {
+          return <MovieListItem movie={movie} key={movie.id} />;
+        })}
     </div>
   );
 }
