@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { deleteMovie, getMovieForUpdate, getMovies } from '../api/movie';
-import { useNotification } from '../hooks';
+import { useMovies, useNotification } from '../hooks';
 import ConfirmModal from './models/ConfirmModal';
 import UpdateMovie from './models/UpdateMovie';
 import MovieListItem from './MovieListItem';
@@ -16,12 +16,14 @@ export default function LatestUploads() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const { updateNotification } = useNotification();
 
-  const fetchLatestUploads = async () => {
-    const { error, movies } = await getMovies(pageNo, limit);
-    if (error) return updateNotification(error);
+  const { fetchLatestUploads, latestUploads } = useMovies();
 
-    setMovies([...movies]);
-  };
+  // const fetchLatestUploads = async () => {
+  //   const { error, movies } = await getMovies(pageNo, limit);
+  //   if (error) return updateNotification(error);
+
+  //   setMovies([...movies]);
+  // };
 
   const handleOnDeleteClick = (movie) => {
     setSelectedMovie(movie);
@@ -73,7 +75,7 @@ export default function LatestUploads() {
         </h1>
 
         <div className="space-y-3">
-          {movies.map((movie) => {
+          {latestUploads.map((movie) => {
             return (
               <MovieListItem
                 onDeleteClick={() => handleOnDeleteClick(movie)}
