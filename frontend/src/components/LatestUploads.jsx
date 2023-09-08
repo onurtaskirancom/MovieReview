@@ -9,12 +9,12 @@ const pageNo = 0;
 const limit = 5;
 
 export default function LatestUploads() {
-  const [movies, setMovies] = useState([]);
-  const [busy, setBusy] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const { updateNotification } = useNotification();
+  // const [movies, setMovies] = useState([]);
+  // const [busy, setBusy] = useState(false);
+  // const [showConfirmModal, setShowConfirmModal] = useState(false);
+  // const [showUpdateModal, setShowUpdateModal] = useState(false);
+  // const [selectedMovie, setSelectedMovie] = useState(null);
+  // const { updateNotification } = useNotification();
 
   const { fetchLatestUploads, latestUploads } = useMovies();
 
@@ -25,43 +25,45 @@ export default function LatestUploads() {
   //   setMovies([...movies]);
   // };
 
-  const handleOnDeleteClick = (movie) => {
-    setSelectedMovie(movie);
-    setShowConfirmModal(true);
-  };
+  // const handleOnDeleteClick = (movie) => {
+  //   setSelectedMovie(movie);
+  //   setShowConfirmModal(true);
+  // };
 
-  const handleOnEditClick = async ({ id }) => {
-    const { movie, error } = await getMovieForUpdate(id);
-    setShowUpdateModal(true);
+  // const handleOnEditClick = async ({ id }) => {
+  //   const { movie, error } = await getMovieForUpdate(id);
+  //   setShowUpdateModal(true);
 
-    if (error) return updateNotification('error', error);
+  //   if (error) return updateNotification("error", error);
 
-    setSelectedMovie(movie);
-  };
+  //   setSelectedMovie(movie);
+  // };
 
-  const handleOnDeleteConfirm = async () => {
-    setBusy(true);
-    const { error, message } = await deleteMovie(selectedMovie.id);
-    setBusy(false);
+  // const handleOnDeleteConfirm = async () => {
+  //   setBusy(true);
+  //   const { error, message } = await deleteMovie(selectedMovie.id);
+  //   setBusy(false);
 
-    if (error) return updateNotification('error', error);
+  //   if (error) return updateNotification("error", error);
 
-    updateNotification('success', message);
-    fetchLatestUploads();
-    hideConfirmModal();
-  };
+  //   updateNotification("success", message);
+  //   fetchLatestUploads();
+  //   hideConfirmModal();
+  // };
 
-  const handleOnUpdate = (movie) => {
-    const updatedMovies = movies.map((m) => {
-      if (m.id === movie.id) return movie;
-      return m;
-    });
+  // const handleOnUpdate = (movie) => {
+  //   const updatedMovies = movies.map((m) => {
+  //     if (m.id === movie.id) return movie;
+  //     return m;
+  //   });
 
-    setMovies([...updatedMovies]);
-  };
+  //   setMovies([...updatedMovies]);
+  // };
 
-  const hideConfirmModal = () => setShowConfirmModal(false);
-  const hideUpdateModal = () => setShowUpdateModal(false);
+  // const hideConfirmModal = () => setShowConfirmModal(false);
+  // const hideUpdateModal = () => setShowUpdateModal(false);
+
+  const handleUIUpdate = () => fetchLatestUploads();
 
   useEffect(() => {
     fetchLatestUploads();
@@ -78,17 +80,19 @@ export default function LatestUploads() {
           {latestUploads.map((movie) => {
             return (
               <MovieListItem
-                onDeleteClick={() => handleOnDeleteClick(movie)}
-                onEditClick={() => handleOnEditClick(movie)}
                 key={movie.id}
                 movie={movie}
+                afterDelete={handleUIUpdate}
+                afterUpdate={handleUIUpdate}
+                // onDeleteClick={() => handleOnDeleteClick(movie)}
+                // onEditClick={() => handleOnEditClick(movie)}
               />
             );
           })}
         </div>
       </div>
 
-      <ConfirmModal
+      {/* <ConfirmModal
         title="Are you sure?"
         subtitle="This action will remove this movie permanently!"
         visible={showConfirmModal}
@@ -102,7 +106,7 @@ export default function LatestUploads() {
         onClose={hideUpdateModal}
         initialState={selectedMovie}
         onSuccess={handleOnUpdate}
-      />
+      /> */}
     </>
   );
 }

@@ -1,6 +1,6 @@
-import React, { useState, createContext } from "react";
-import { getMovies } from "../api/movie";
-import { useNotification } from "../hooks";
+import React, { useState, createContext } from 'react';
+import { getMovies } from '../api/movie';
+import { useNotification } from '../hooks';
 
 export const MovieContext = createContext();
 
@@ -16,14 +16,14 @@ const MoviesProvider = ({ children }) => {
 
   const fetchLatestUploads = async (qty = 5) => {
     const { error, movies } = await getMovies(0, qty);
-    if (error) return updateNotification("error", error);
+    if (error) return updateNotification('error', error);
 
     setLatestUploads([...movies]);
   };
 
   const fetchMovies = async (pageNo = currentPageNo) => {
     const { error, movies } = await getMovies(pageNo, limit);
-    if (error) updateNotification("error", error);
+    if (error) updateNotification('error', error);
 
     if (!movies.length) {
       currentPageNo = pageNo - 1;
