@@ -367,3 +367,22 @@ exports.searchMovies = async (req, res) => {
     }),
   });
 };
+
+exports.getLatestUploads = async (req, res) => {
+  const { limit = 5 } = req.query;
+
+  const results = await Movie.find({ status: 'public' })
+    .sort('-createdAt')
+    .limit(parseInt(limit));
+
+  const movies = results.map((m) => {
+    return {
+      id: m._id,
+      title: m.title,
+      storyLine: m.storyLine,
+      poster: m.poster?.url,
+      trailer: m.trailer?.url,
+    };
+  });
+  res.json({ movies });
+};
