@@ -1,5 +1,5 @@
-const crypto = require("crypto");
-const cloudinary = require("../cloud");
+const crypto = require('crypto');
+const cloudinary = require('../cloud');
 
 exports.sendError = (res, error, statusCode = 401) =>
   res.status(statusCode).json({ error });
@@ -8,7 +8,7 @@ exports.generateRandomByte = () => {
   return new Promise((resolve, reject) => {
     crypto.randomBytes(30, (err, buff) => {
       if (err) reject(err);
-      const buffString = buff.toString("hex");
+      const buffString = buff.toString('hex');
 
       resolve(buffString);
     });
@@ -16,13 +16,13 @@ exports.generateRandomByte = () => {
 };
 
 exports.handleNotFound = (req, res) => {
-  this.sendError(res, "Not found", 404);
+  this.sendError(res, 'Not found', 404);
 };
 
 exports.uploadImageToCloud = async (file) => {
   const { secure_url: url, public_id } = await cloudinary.uploader.upload(
     file,
-    { gravity: "face", height: 500, width: 500, crop: "thumb" }
+    { gravity: 'face', height: 500, width: 500, crop: 'thumb' }
   );
 
   return { url, public_id };
@@ -48,4 +48,31 @@ exports.parseData = (req, res, next) => {
   if (writers) req.body.writers = JSON.parse(writers);
 
   next();
+};
+
+exports.averageRatingPipeline = (movieId) => {
+  return [
+    {
+      $lookup: {
+        from: 'Review',
+        localField: 'rating',
+        foreignField: '_id',
+        as: 'avgRat',
+      },
+    },
+    {
+      $match: { parentMovie: movieId },
+    },
+    {
+      $group: {
+        _id: null,
+        ratingAvg: {
+          $avg: '$rating',
+        },
+        reviewCount: {
+          $sum: 1,
+        },
+      },
+    },
+  ];
 };
