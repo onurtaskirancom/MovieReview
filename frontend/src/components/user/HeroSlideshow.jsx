@@ -5,7 +5,8 @@ import { useNotification } from '../../hooks';
 
 export default function HeroSlideshow() {
   const [slide, setSlide] = useState({});
-  const [movies, setMovies] = useState([]);
+  const [slides, setSlides] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const { updateNotification } = useNotification();
 
@@ -13,8 +14,14 @@ export default function HeroSlideshow() {
     const { error, movies } = await getLatestUploads();
     if (error) return updateNotification('error', error);
 
-    setMovies([...movies]);
+    setSlides([...movies]);
     setSlide(movies[0]);
+  };
+
+  const handleOnNextClick = () => {
+    const nextSlideIndex = currentIndex + 1;
+    setSlide(slides[nextSlideIndex]);
+    setCurrentIndex(nextSlideIndex);
   };
 
   useEffect(() => {
@@ -25,9 +32,9 @@ export default function HeroSlideshow() {
     <div className="w-full flex">
       {/* Slide show section */}
       <div className="w-4/5 aspect-video relative">
-        <img src={slide.poster} alt="" />
+        <img className="aspect-video object-cover" src={slide.poster} alt="" />
 
-        <SlideShowController />
+        <SlideShowController onNextClick={handleOnNextClick} />
       </div>
 
       {/* Up Next Section */}
