@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
 import { getLatestUploads } from '../../api/movie';
 import { useNotification } from '../../hooks';
@@ -8,6 +8,7 @@ export default function HeroSlideshow() {
   const [slide, setSlide] = useState({});
   const [slides, setSlides] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const slideRef = useRef();
 
   const { updateNotification } = useNotification();
 
@@ -24,6 +25,12 @@ export default function HeroSlideshow() {
     count = (count + 1) % slides.length;
     setSlide(slides[count]);
     setCurrentIndex(count);
+
+    slideRef.current.classList.add('slide-in-from-right');
+  };
+
+  const handleAnimationEnd = () => {
+    slideRef.current.classList.remove('slide-in-from-right');
   };
 
   useEffect(() => {
@@ -33,8 +40,14 @@ export default function HeroSlideshow() {
   return (
     <div className="w-full flex">
       {/* Slide show section */}
-      <div className="w-4/5 aspect-video relative">
-        <img className="aspect-video object-cover" src={slide.poster} alt="" />
+      <div className="w-4/5 aspect-video relative overflow-hidden">
+        <img
+          ref={slideRef}
+          onAnimationEnd={handleAnimationEnd}
+          className="aspect-video object-cover"
+          src={slide.poster}
+          alt=""
+        />
 
         <SlideShowController onNextClick={handleOnNextClick} />
       </div>
