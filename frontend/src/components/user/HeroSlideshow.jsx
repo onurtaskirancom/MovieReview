@@ -6,9 +6,11 @@ import { useNotification } from '../../hooks';
 let count = 0;
 export default function HeroSlideshow() {
   const [slide, setSlide] = useState({});
+  const [clonedSlide, setClonedSlide] = useState({});
   const [slides, setSlides] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef();
+  const clonedSlideRef = useRef();
 
   const { updateNotification } = useNotification();
 
@@ -22,15 +24,19 @@ export default function HeroSlideshow() {
 
   //0,1,2,3,4
   const handleOnNextClick = () => {
+    setClonedSlide(slides[count]);
     count = (count + 1) % slides.length;
     setSlide(slides[count]);
     setCurrentIndex(count);
 
+    clonedSlideRef.current.classList.add('slide-out-to-left');
     slideRef.current.classList.add('slide-in-from-right');
   };
 
   const handleAnimationEnd = () => {
     slideRef.current.classList.remove('slide-in-from-right');
+    clonedSlideRef.current.classList.remove('slide-out-to-left');
+    setClonedSlide({});
   };
 
   useEffect(() => {
@@ -46,6 +52,13 @@ export default function HeroSlideshow() {
           onAnimationEnd={handleAnimationEnd}
           className="aspect-video object-cover"
           src={slide.poster}
+          alt=""
+        />
+        <img
+          ref={clonedSlideRef}
+          onAnimationEnd={handleAnimationEnd}
+          className="aspect-video object-cover absolute inset-0"
+          src={clonedSlide.poster}
           alt=""
         />
 
