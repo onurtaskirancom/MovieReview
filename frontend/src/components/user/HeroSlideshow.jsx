@@ -5,10 +5,9 @@ import { useNotification } from '../../hooks';
 
 let count = 0;
 export default function HeroSlideshow() {
-  const [slide, setSlide] = useState({});
+  const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
   const [slides, setSlides] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef();
   const clonedSlideRef = useRef();
 
@@ -19,23 +18,37 @@ export default function HeroSlideshow() {
     if (error) return updateNotification('error', error);
 
     setSlides([...movies]);
-    setSlide(movies[0]);
+    setCurrentSlide(movies[0]);
   };
 
   //0,1,2,3,4
   const handleOnNextClick = () => {
     setClonedSlide(slides[count]);
     count = (count + 1) % slides.length;
-    setSlide(slides[count]);
-    setCurrentIndex(count);
+    setCurrentSlide(slides[count]);
 
     clonedSlideRef.current.classList.add('slide-out-to-left');
     slideRef.current.classList.add('slide-in-from-right');
   };
 
+  const handleOnPrevClick = () => {
+    setClonedSlide(slides[count]);
+    count = (count + slides.length - 1) % slides.length;
+    setCurrentSlide(slides[count]);
+
+    clonedSlideRef.current.classList.add('slide-out-to-right');
+    slideRef.current.classList.add('slide-in-from-left');
+  };
+
   const handleAnimationEnd = () => {
-    slideRef.current.classList.remove('slide-in-from-right');
-    clonedSlideRef.current.classList.remove('slide-out-to-left');
+    const classes = [
+      'slide-out-to-left',
+      'slide-in-from-right',
+      'slide-out-to-right',
+      'slide-in-from-left',
+    ];
+    slideRef.current.classList.remove(...classes);
+    clonedSlideRef.current.classList.remove(...classes);
     setClonedSlide({});
   };
 
@@ -51,18 +64,21 @@ export default function HeroSlideshow() {
           ref={slideRef}
           onAnimationEnd={handleAnimationEnd}
           className="aspect-video object-cover"
-          src={slide.poster}
+          src={currentSlide.poster}
           alt=""
         />
         <img
           ref={clonedSlideRef}
-          onAnimationEnd={handleAnimationEnd}
+          //   onAnimationEnd={handleAnimationEnd}
           className="aspect-video object-cover absolute inset-0"
           src={clonedSlide.poster}
           alt=""
         />
 
-        <SlideShowController onNextClick={handleOnNextClick} />
+        <SlideShowController
+          onNextClick={handleOnNextClick}
+          onPrevClick={handleOnPrevClick}
+        />
       </div>
 
       {/* Up Next Section */}
