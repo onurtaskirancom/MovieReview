@@ -4,6 +4,7 @@ import { getLatestUploads } from '../../api/movie';
 import { useNotification } from '../../hooks';
 
 let count = 0;
+let intervalId;
 export default function HeroSlideshow() {
   const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
@@ -19,6 +20,14 @@ export default function HeroSlideshow() {
 
     setSlides([...movies]);
     setCurrentSlide(movies[0]);
+  };
+
+  const startSlideShow = () => {
+    intervalId = setInterval(handleOnNextClick, 3500);
+  };
+
+  const pauseSlideShow = () => {
+    clearInterval(intervalId);
   };
 
   //0,1,2,3,4
@@ -54,7 +63,15 @@ export default function HeroSlideshow() {
 
   useEffect(() => {
     fetchLatestUploads();
+
+    return () => {
+      pauseSlideShow();
+    };
   }, []);
+
+  useEffect(() => {
+    if (slides.length) startSlideShow();
+  }, [slides.length]);
 
   return (
     <div className="w-full flex">
