@@ -8,6 +8,7 @@ let intervalId;
 export default function HeroSlideshow() {
   const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
+  const [visible, setVisible] = useState(true);
   const [slides, setSlides] = useState([]);
   const slideRef = useRef();
   const clonedSlideRef = useRef();
@@ -61,17 +62,29 @@ export default function HeroSlideshow() {
     setClonedSlide({});
   };
 
+  const handleOnVisibilityChange = () => {
+    const visibility = document.visibilityState;
+    if (visibility === 'hidden') setVisible(false);
+    if (visibility === 'visible') setVisible(true);
+  };
+
   useEffect(() => {
     fetchLatestUploads();
+    document.addEventListener('visibilitychange', handleOnVisibilityChange);
 
     return () => {
       pauseSlideShow();
+      document.removeEventListener(
+        'visibilitychange',
+        handleOnVisibilityChange
+      );
     };
   }, []);
 
   useEffect(() => {
-    if (slides.length) startSlideShow();
-  }, [slides.length]);
+    if (slides.length && visible) startSlideShow();
+    else pauseSlideShow();
+  }, [slides.length, visible]);
 
   return (
     <div className="w-full flex">
