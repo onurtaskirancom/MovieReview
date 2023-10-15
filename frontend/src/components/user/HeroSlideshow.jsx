@@ -33,6 +33,7 @@ export default function HeroSlideshow() {
 
   //0,1,2,3,4
   const handleOnNextClick = () => {
+    pauseSlideShow();
     setClonedSlide(slides[count]);
     count = (count + 1) % slides.length;
     setCurrentSlide(slides[count]);
@@ -42,6 +43,7 @@ export default function HeroSlideshow() {
   };
 
   const handleOnPrevClick = () => {
+    pauseSlideShow();
     setClonedSlide(slides[count]);
     count = (count + slides.length - 1) % slides.length;
     setCurrentSlide(slides[count]);
@@ -60,6 +62,7 @@ export default function HeroSlideshow() {
     slideRef.current.classList.remove(...classes);
     clonedSlideRef.current.classList.remove(...classes);
     setClonedSlide({});
+    startSlideShow();
   };
 
   const handleOnVisibilityChange = () => {
@@ -90,16 +93,27 @@ export default function HeroSlideshow() {
     <div className="w-full flex">
       {/* Slide show section */}
       <div className="w-4/5 aspect-video relative overflow-hidden">
-        <img
-          ref={slideRef}
-          onAnimationEnd={handleAnimationEnd}
-          className="aspect-video object-cover"
-          src={currentSlide.poster}
-          alt=""
-        />
+        {/* current slide */}
+        <div className="w-full cursor-pointer">
+          <img
+            ref={slideRef}
+            // onAnimationEnd={handleAnimationEnd}
+            className="aspect-video object-cover"
+            src={currentSlide.poster}
+            alt=""
+          />
+
+          <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white dark:from-primary">
+            <h1 className="font-semibold text-4xl dark:text-highlight-dark text-highlight">
+              {currentSlide.title}
+            </h1>
+          </div>
+        </div>
+
+        {/* cloned slide */}
         <img
           ref={clonedSlideRef}
-          //   onAnimationEnd={handleAnimationEnd}
+          onAnimationEnd={handleAnimationEnd}
           className="aspect-video object-cover absolute inset-0"
           src={clonedSlide.poster}
           alt=""
