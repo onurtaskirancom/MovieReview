@@ -9,6 +9,7 @@ export default function HeroSlideshow() {
   const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
   const [visible, setVisible] = useState(true);
+  const [upNext, setUpNext] = useState([]);
   const [slides, setSlides] = useState([]);
   const slideRef = useRef();
   const clonedSlideRef = useRef();
@@ -31,6 +32,22 @@ export default function HeroSlideshow() {
     clearInterval(intervalId);
   };
 
+  const updateUpNext = (currentIndex) => {
+    if (!slides.length) return;
+
+    const upNextCount = currentIndex + 1;
+    const end = upNextCount + 3;
+
+    let newSlides = [...slides];
+    newSlides = newSlides.slice(upNextCount, end);
+
+    if (!newSlides.length) {
+      newSlides = [...slides].slice(0, 3);
+    }
+
+    setUpNext([...newSlides]);
+  };
+
   //0,1,2,3,4
   const handleOnNextClick = () => {
     pauseSlideShow();
@@ -40,6 +57,7 @@ export default function HeroSlideshow() {
 
     clonedSlideRef.current.classList.add('slide-out-to-left');
     slideRef.current.classList.add('slide-in-from-right');
+    updateUpNext(count);
   };
 
   const handleOnPrevClick = () => {
@@ -50,6 +68,7 @@ export default function HeroSlideshow() {
 
     clonedSlideRef.current.classList.add('slide-out-to-right');
     slideRef.current.classList.add('slide-in-from-left');
+    updateUpNext(count);
   };
 
   const handleAnimationEnd = () => {
@@ -85,8 +104,10 @@ export default function HeroSlideshow() {
   }, []);
 
   useEffect(() => {
-    if (slides.length && visible) startSlideShow();
-    else pauseSlideShow();
+    if (slides.length && visible) {
+      startSlideShow();
+      updateUpNext(count);
+    } else pauseSlideShow();
   }, [slides.length, visible]);
 
   return (
@@ -116,7 +137,21 @@ export default function HeroSlideshow() {
       </div>
 
       {/* Up Next Section */}
-      <div className="w-1/5 aspect-video bg-red-300"></div>
+      <div className="w-1/5 space-y-3 px-3">
+        <h1 className="font-semibold text-2xl text-primary dark:text-white">
+          Up Next
+        </h1>
+        {upNext.map(({ poster, id }) => {
+          return (
+            <img
+              key={id}
+              src={poster}
+              alt=""
+              className="aspect-video object-cover rounded"
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
