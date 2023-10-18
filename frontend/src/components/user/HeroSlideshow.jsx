@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 import { getLatestUploads } from '../../api/movie';
 import { useNotification } from '../../hooks';
 
@@ -119,6 +120,7 @@ export default function HeroSlideshow() {
           ref={slideRef}
           title={currentSlide.title}
           src={currentSlide.poster}
+          id={currentSlide.id}
         />
 
         {/* cloned slide */}
@@ -128,6 +130,7 @@ export default function HeroSlideshow() {
           className="absolute inset-0"
           src={clonedSlide.poster}
           title={clonedSlide.title}
+          id={currentSlide.id}
         />
 
         <SlideShowController
@@ -174,8 +177,9 @@ const SlideShowController = ({ onNextClick, onPrevClick }) => {
 const Slide = forwardRef((props, ref) => {
   const { title, id, src, className = '', ...rest } = props;
   return (
-    <div
+    <Link
       ref={ref}
+      to={'/movie/' + id}
       className={'w-full cursor-pointer block ' + className}
       {...rest}
     >
@@ -189,6 +193,6 @@ const Slide = forwardRef((props, ref) => {
           </h1>
         </div>
       ) : null}
-    </div>
+    </Link>
   );
 });
