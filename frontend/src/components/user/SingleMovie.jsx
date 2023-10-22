@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getSingleMovie } from '../../api/movie';
 import { useNotification } from '../../hooks';
 import Container from '../Container';
+import RatingStar from '../RatingStar';
 
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
@@ -42,7 +43,8 @@ export default function SingleMovie() {
           <h1 className="xl:text-4xl lg:text-3xl text-2xl  text-highlight dark:text-highlight-dark font-semibold py-3">
             {title}
           </h1>
-          <div className="">
+          <div className="flex flex-col items-end">
+            <RatingStar rating={reviews.ratingAvg} />
             <Link
               className="text-highlight dark:text-highlight-dark hover:underline"
               to={'/movie/reviews/' + id}
