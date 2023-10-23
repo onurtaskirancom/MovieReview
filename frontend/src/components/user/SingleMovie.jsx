@@ -5,6 +5,12 @@ import { useNotification } from '../../hooks';
 import Container from '../Container';
 import RatingStar from '../RatingStar';
 
+const convertReviewCount = (count = 0) => {
+  if (count <= 999) return count;
+
+  return parseFloat(count / 1000).toFixed(2) + 'k';
+};
+
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
   const [movie, setMovie] = useState({});
@@ -33,10 +39,19 @@ export default function SingleMovie() {
       </div>
     );
 
-  const { id, trailer, poster, title, reviews = {} } = movie;
+  const {
+    id,
+    trailer,
+    poster,
+    title,
+    reviews = {},
+    storyLine,
+    director,
+    writers,
+  } = movie;
 
   return (
-    <div className="dark:bg-primary bg-white min-h-screen pb-10">
+    <div className="dark:bg-primary bg-white min-h-screen">
       <Container className="xl:px-0 px-2">
         <video poster={poster} controls src={trailer}></video>
         <div className="flex justify-between">
@@ -49,8 +64,41 @@ export default function SingleMovie() {
               className="text-highlight dark:text-highlight-dark hover:underline"
               to={'/movie/reviews/' + id}
             >
-              {reviews.reviewCount} Reviews
+              {convertReviewCount(reviews.reviewCount)} Reviews
             </Link>
+
+            <button
+              className="text-highlight dark:text-highlight-dark hover:underline"
+              type="button"
+            >
+              Rate the movie
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
+
+          <div className="flex space-x-2">
+            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
+              Director:
+            </p>
+            <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
+              {director.name}
+            </p>
+          </div>
+
+          <div className="flex">
+            <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">
+              Writers:
+            </p>
+            <div className="flex space-x-2">
+              {writers.map((w) => (
+                <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
+                  {w.name}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
       </Container>
