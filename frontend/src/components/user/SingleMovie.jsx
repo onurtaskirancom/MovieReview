@@ -11,6 +11,10 @@ const convertReviewCount = (count = 0) => {
   return parseFloat(count / 1000).toFixed(2) + 'k';
 };
 
+const convertDate = (date = '') => {
+  return date.split('T')[0];
+};
+
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
   const [movie, setMovie] = useState({});
@@ -44,14 +48,17 @@ export default function SingleMovie() {
     trailer,
     poster,
     title,
-    reviews = {},
     storyLine,
-    director,
-    writers,
+    language,
+    releseDate,
+    director = {},
+    reviews = {},
+    writers = [],
+    cast = [],
   } = movie;
 
   return (
-    <div className="dark:bg-primary bg-white min-h-screen">
+    <div className="dark:bg-primary bg-white min-h-screen pb-10">
       <Container className="xl:px-0 px-2">
         <video poster={poster} controls src={trailer}></video>
         <div className="flex justify-between">
@@ -94,11 +101,50 @@ export default function SingleMovie() {
             </p>
             <div className="flex space-x-2">
               {writers.map((w) => (
-                <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
+                <p
+                  key={w.id}
+                  className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer"
+                >
                   {w.name}
                 </p>
               ))}
             </div>
+          </div>
+
+          <div className="flex">
+            <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">
+              Cast:
+            </p>
+            <div className="flex space-x-2">
+              {cast.map((c) =>
+                c.leadActor ? (
+                  <p
+                    key={c.profile.id}
+                    className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer"
+                  >
+                    {c.profile.name}
+                  </p>
+                ) : null
+              )}
+            </div>
+          </div>
+
+          <div className="flex space-x-2">
+            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
+              Language:
+            </p>
+            <p className="text-highlight dark:text-highlight-dark">
+              {language}
+            </p>
+          </div>
+
+          <div className="flex space-x-2">
+            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
+              Release Date:
+            </p>
+            <p className="text-highlight dark:text-highlight-dark">
+              {convertDate(releseDate)}
+            </p>
           </div>
         </div>
       </Container>
