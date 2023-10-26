@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSingleMovie } from '../../api/movie';
-import { useNotification } from '../../hooks';
+import { useAuth, useNotification } from '../../hooks';
 import Container from '../Container';
 import RatingStar from '../RatingStar';
+import RelatedMovies from '../RelatedMovies';
 
 const convertReviewCount = (count = 0) => {
   if (count <= 999) return count;
@@ -21,6 +22,10 @@ export default function SingleMovie() {
 
   const { movieId } = useParams();
   const { updateNotification } = useNotification();
+  const { authInfo } = useAuth();
+  const { isLoggedIn } = authInfo;
+
+  const navigate = useNavigate();
 
   const fetchMovie = async () => {
     const { error, movie } = await getSingleMovie(movieId);
@@ -28,6 +33,10 @@ export default function SingleMovie() {
 
     setReady(true);
     setMovie(movie);
+  };
+
+  const handleOnRateMovie = () => {
+    if (!isLoggedIn) return navigate('/auth/signin');
   };
 
   useEffect(() => {
@@ -79,6 +88,7 @@ export default function SingleMovie() {
             <button
               className="text-highlight dark:text-highlight-dark hover:underline"
               type="button"
+              onClick={handleOnRateMovie}
             >
               Rate the movie
             </button>
@@ -199,6 +209,10 @@ export default function SingleMovie() {
               );
             })}
           </div>
+        </div>
+
+        <div className="mt-3">
+          <RelatedMovies movieId={movieId} />
         </div>
       </Container>
     </div>
