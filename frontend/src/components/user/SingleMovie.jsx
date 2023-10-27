@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSingleMovie } from '../../api/movie';
 import { useAuth, useNotification } from '../../hooks';
 import Container from '../Container';
+import AddRatingModal from '../models/AddRatingModal';
 import RatingStar from '../RatingStar';
 import RelatedMovies from '../RelatedMovies';
 
@@ -215,6 +216,8 @@ export default function SingleMovie() {
           <RelatedMovies movieId={movieId} />
         </div>
       </Container>
+
+      <AddRatingModal />
     </div>
   );
 }
