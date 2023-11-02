@@ -19,6 +19,7 @@ const convertDate = (date = '') => {
 
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
 
   const { movieId } = useParams();
@@ -38,6 +39,15 @@ export default function SingleMovie() {
 
   const handleOnRateMovie = () => {
     if (!isLoggedIn) return navigate('/auth/signin');
+    setShowRatingModal(true);
+  };
+
+  const hideRatingModal = () => {
+    setShowRatingModal(false);
+  };
+
+  const handleOnRatingSuccess = (reviews) => {
+    setMovie({ ...movie, reviews: { ...reviews } });
   };
 
   useEffect(() => {
@@ -217,7 +227,11 @@ export default function SingleMovie() {
         </div>
       </Container>
 
-      <AddRatingModal />
+      <AddRatingModal
+        visible={showRatingModal}
+        onClose={hideRatingModal}
+        onSuccess={handleOnRatingSuccess}
+      />
     </div>
   );
 }
