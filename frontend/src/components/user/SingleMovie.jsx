@@ -103,117 +103,78 @@ export default function SingleMovie() {
 
         <div className="space-y-3">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
+          <ListWithLabel label="Director:">
+            <CustomButtonLink label={director.name} />
+          </ListWithLabel>
 
-          <div className="flex space-x-2">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
-              Director:
-            </p>
-            <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
-              {director.name}
-            </p>
-          </div>
+          <ListWithLabel label="Writers:">
+            {writers.map((w) => (
+              <CustomButtonLink key={w.id} label={w.name} />
+            ))}
+          </ListWithLabel>
 
-          <div className="flex">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">
-              Writers:
-            </p>
-            <div className="flex space-x-2">
-              {writers.map((w) => (
-                <p
-                  key={w.id}
-                  className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer"
-                >
-                  {w.name}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">
-              Cast:
-            </p>
-            <div className="flex space-x-2">
-              {cast.map((c) =>
-                c.leadActor ? (
-                  <p
-                    key={c.profile.id}
-                    className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer"
-                  >
-                    {c.profile.name}
-                  </p>
-                ) : null
-              )}
-            </div>
-          </div>
-
-          <div className="flex space-x-2">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
-              Language:
-            </p>
-            <p className="text-highlight dark:text-highlight-dark">
-              {language}
-            </p>
-          </div>
-
-          <div className="flex space-x-2">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
-              Release Date:
-            </p>
-            <p className="text-highlight dark:text-highlight-dark">
-              {convertDate(releseDate)}
-            </p>
-          </div>
-
-          <div className="flex">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">
-              Genres:
-            </p>
-            <div className="flex space-x-2">
-              {genres.map((g) => (
-                <p key={g} className="text-highlight dark:text-highlight-dark">
-                  {g}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex space-x-2">
-            <p className="text-light-subtle dark:text-dark-subtle font-semibold">
-              Type:
-            </p>
-            <p className="text-highlight dark:text-highlight-dark">{type}</p>
-          </div>
-        </div>
-
-        <div className="mt-5">
-          <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">
-            Cast:
-          </h1>
-          <div className="grid grid-cols-10">
-            {cast.map((c) => {
-              return (
-                <div key={c.profile.id} className="flex flex-col items-center">
-                  <img
-                    className="w-24 h-24 aspect-square object-cover rounded-full"
-                    src={c.profile.avatar}
-                    alt=""
-                  />
-
-                  <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
-                    {c.profile.name}
-                  </p>
-
-                  <span className="text-light-subtle dark:text-dark-subtle text-sm">
-                    as
-                  </span>
-
-                  <p className="text-light-subtle dark:text-dark-subtle">
-                    {c.roleAs}
-                  </p>
-                </div>
-              );
+          <ListWithLabel label="Cast:">
+            {cast.map(({ id, profile, leadActor }) => {
+              return leadActor ? (
+                <CustomButtonLink label={profile.name} key={id} />
+              ) : null;
             })}
+          </ListWithLabel>
+
+          <ListWithLabel label="Language:">
+            <CustomButtonLink label={language} clickable={false} />
+          </ListWithLabel>
+
+          <ListWithLabel label="Release Date:">
+            <CustomButtonLink
+              label={convertDate(releseDate)}
+              clickable={false}
+            />
+          </ListWithLabel>
+
+          <ListWithLabel label="Cast:">
+            {genres.map((g) => (
+              <CustomButtonLink label={g} key={g} clickable={false} />
+            ))}
+          </ListWithLabel>
+
+          <ListWithLabel label="Type:">
+            <CustomButtonLink label={type} clickable={false} />
+          </ListWithLabel>
+
+          <div className="mt-5">
+            {' '}
+            <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">
+              Cast:
+            </h1>
+            <div className="grid grid-cols-10">
+              {cast.map((c) => {
+                return (
+                  <div
+                    key={c.profile.id}
+                    className="flex flex-col items-center"
+                  >
+                    <img
+                      className="w-24 h-24 aspect-square object-cover rounded-full"
+                      src={c.profile.avatar}
+                      alt=""
+                    />
+
+                    <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
+                      {c.profile.name}
+                    </p>
+
+                    <span className="text-light-subtle dark:text-dark-subtle text-sm">
+                      as
+                    </span>
+
+                    <p className="text-light-subtle dark:text-dark-subtle">
+                      {c.roleAs}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -230,3 +191,14 @@ export default function SingleMovie() {
     </div>
   );
 }
+
+const ListWithLabel = ({ children, label }) => {
+  return (
+    <div className="flex space-x-2">
+      <p className="text-light-subtle dark:text-dark-subtle font-semibold">
+        {label}
+      </p>
+      {children}
+    </div>
+  );
+};
