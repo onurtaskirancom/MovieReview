@@ -142,43 +142,7 @@ export default function SingleMovie() {
             <CustomButtonLink label={type} clickable={false} />
           </ListWithLabel>
 
-          <div className="mt-5">
-            {' '}
-            <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">
-              Cast:
-            </h1>
-            <div className="grid grid-cols-10">
-              {cast.map((c) => {
-                return (
-                  <div
-                    key={c.profile.id}
-                    className="flex flex-col items-center"
-                  >
-                    <img
-                      className="w-24 h-24 aspect-square object-cover rounded-full"
-                      src={c.profile.avatar}
-                      alt=""
-                    />
-
-                    <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">
-                      {c.profile.name}
-                    </p>
-
-                    <span className="text-light-subtle dark:text-dark-subtle text-sm">
-                      as
-                    </span>
-
-                    <p className="text-light-subtle dark:text-dark-subtle">
-                      {c.roleAs}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-3">
+          <CastProfiles cast={cast} />
           <RelatedMovies movieId={movieId} />
         </div>
       </Container>
@@ -199,6 +163,40 @@ const ListWithLabel = ({ children, label }) => {
         {label}
       </p>
       {children}
+    </div>
+  );
+};
+
+const CastProfiles = ({ cast, onProfileClick }) => {
+  return (
+    <div className="">
+      <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">
+        Cast:
+      </h1>
+      <div className="flex flex-wrap space-x-4">
+        {cast.map(({ id, profile, roleAs }) => {
+          return (
+            <div
+              key={id}
+              className="basis-28 flex flex-col items-center text-center mb-4"
+            >
+              <img
+                className="w-24 h-24 aspect-square object-cover rounded-full"
+                src={profile.avatar}
+                alt=""
+              />
+
+              <CustomButtonLink label={profile.name} />
+              <span className="text-light-subtle dark:text-dark-subtle text-sm">
+                as
+              </span>
+              <p className="text-light-subtle dark:text-dark-subtle">
+                {roleAs}
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
