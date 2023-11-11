@@ -52,9 +52,12 @@ export default function MovieUpload({ visible, onClose }) {
 
     setBusy(true);
     data.append('trailer', JSON.stringify(videoInfo));
-    const res = await uploadMovie(data);
+    const { error, movie } = await uploadMovie(data);
     setBusy(false);
-    console.log(res);
+
+    if (error) return updateNotification('error', error);
+
+    updateNotification('success', 'Movie uploads successfully.');
 
     onClose();
   };
@@ -75,7 +78,11 @@ export default function MovieUpload({ visible, onClose }) {
           handleChange={handleChange}
         />
       ) : (
-        <MovieForm btnTitle="Upload" busy={busy} onSubmit={!busy ? handleSubmit : null} />
+        <MovieForm
+          btnTitle="Upload"
+          busy={busy}
+          onSubmit={!busy ? handleSubmit : null}
+        />
       )}
     </ModalContainer>
   );
