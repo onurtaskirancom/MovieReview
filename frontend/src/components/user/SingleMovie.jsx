@@ -5,6 +5,7 @@ import { useAuth, useNotification } from '../../hooks';
 import Container from '../Container';
 import CustomButtonLink from '../CustomButtonLink';
 import AddRatingModal from '../models/AddRatingModal';
+import ProfileModal from '../models/ProfileModal';
 import RatingStar from '../RatingStar';
 import RelatedMovies from '../RelatedMovies';
 
@@ -22,6 +23,8 @@ export default function SingleMovie() {
   const [ready, setReady] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState({});
 
   const { movieId } = useParams();
   const { updateNotification } = useNotification();
@@ -45,6 +48,15 @@ export default function SingleMovie() {
 
   const hideRatingModal = () => {
     setShowRatingModal(false);
+  };
+
+  const handleProfileClick = (profile) => {
+    setSelectedProfile(profile);
+    setShowProfileModal(true);
+  };
+
+  const hideProfileModal = () => {
+    setShowProfileModal(false);
   };
 
   const handleOnRatingSuccess = (reviews) => {
@@ -104,19 +116,30 @@ export default function SingleMovie() {
         <div className="space-y-3">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
           <ListWithLabel label="Director:">
-            <CustomButtonLink label={director.name} />
+            <CustomButtonLink
+              onClick={() => handleProfileClick(director)}
+              label={director.name}
+            />
           </ListWithLabel>
 
           <ListWithLabel label="Writers:">
             {writers.map((w) => (
-              <CustomButtonLink key={w.id} label={w.name} />
+              <CustomButtonLink
+                onClick={() => handleProfileClick(w)}
+                key={w.id}
+                label={w.name}
+              />
             ))}
           </ListWithLabel>
 
           <ListWithLabel label="Cast:">
             {cast.map(({ id, profile, leadActor }) => {
               return leadActor ? (
-                <CustomButtonLink label={profile.name} key={id} />
+                <CustomButtonLink
+                  onClick={() => handleProfileClick(profile)}
+                  label={profile.name}
+                  key={id}
+                />
               ) : null;
             })}
           </ListWithLabel>
@@ -146,6 +169,12 @@ export default function SingleMovie() {
           <RelatedMovies movieId={movieId} />
         </div>
       </Container>
+
+      <ProfileModal
+        visible={showProfileModal}
+        onClose={hideProfileModal}
+        profileId={selectedProfile.id}
+      />
 
       <AddRatingModal
         visible={showRatingModal}
