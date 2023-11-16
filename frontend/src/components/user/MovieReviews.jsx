@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getReviewByMovie } from '../../api/review';
+import { BsTrash, BsPencilSquare } from 'react-icons/bs';
+
+import { deleteReview, getReviewByMovie } from '../../api/review';
 import { useAuth, useNotification } from '../../hooks';
 import Container from '../Container';
 import CustomButtonLink from '../CustomButtonLink';
 import RatingStar from '../RatingStar';
+import ConfirmModal from '../models/ConfirmModal';
 
 const getNameInitial = (name = '') => {
   return name[0].toUpperCase();
@@ -13,6 +16,8 @@ const getNameInitial = (name = '') => {
 export default function MovieReviews() {
   const [reviews, setReviews] = useState([]);
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const { movieId } = useParams();
   const { authInfo } = useAuth();
@@ -36,6 +41,25 @@ export default function MovieReviews() {
 
     setProfileOwnersReview(matched);
   };
+
+  const handleDeleteConfirm = async () => {
+    setBusy(true);
+    const { error, message } = await deleteReview(profileOwnersReview.id);
+    setBusy(false);
+    if (error) return updateNotification('error', error);
+
+    updateNotification('success', message);
+
+    const updatedReviews = reviews.filter(
+      (r) => r.id !== profileOwnersReview.id
+    );
+    setReviews([...updatedReviews]);
+    setProfileOwnersReview(null);
+    hideConfirmModal();
+  };
+
+  const displayConfirmModal = () => setShowConfirmModal(true);
+  const hideConfirmModal = () => setShowConfirmModal(false);
 
   useEffect(() => {
     if (movieId) fetchReviews();
@@ -61,7 +85,17 @@ export default function MovieReviews() {
         </div>
 
         {profileOwnersReview ? (
-          <ReviewCard review={profileOwnersReview} />
+          <div>
+            <ReviewCard review={profileOwnersReview} />
+            <div className="flex space-x-3 dark:text-white text-primary text-xl p-3">
+              <button onClick={displayConfirmModal} type="button">
+                <BsTrash />
+              </button>
+              <button type="button">
+                <BsPencilSquare />
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3 mt-3">
             {reviews.map((review) => (
@@ -70,6 +104,15 @@ export default function MovieReviews() {
           </div>
         )}
       </Container>
+
+      <ConfirmModal
+        visible={showConfirmModal}
+        onCancel={hideConfirmModal}
+        onConfirm={handleDeleteConfirm}
+        busy={busy}
+        title="Are you sure?"
+        subtitle="This action will remove this review permanently."
+      />
     </div>
   );
 }
