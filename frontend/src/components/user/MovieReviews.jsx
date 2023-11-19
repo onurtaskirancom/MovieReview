@@ -9,6 +9,7 @@ import CustomButtonLink from '../CustomButtonLink';
 import RatingStar from '../RatingStar';
 import ConfirmModal from '../models/ConfirmModal';
 import NotFoundText from '../NotFoundText';
+import EditRatingModal from '../models/EditRatingModal';
 
 const getNameInitial = (name = '') => {
   return name[0].toUpperCase();
@@ -19,6 +20,8 @@ export default function MovieReviews() {
   const [movieTitle, setMovieTitle] = useState('');
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
 
   const { movieId } = useParams();
@@ -45,6 +48,17 @@ export default function MovieReviews() {
     setProfileOwnersReview(matched);
   };
 
+  const handleOnEditClick = () => {
+    const { id, content, rating } = profileOwnersReview;
+    setSelectedReview({
+      id,
+      content,
+      rating,
+    });
+
+    setShowEditModal(true);
+  };
+
   const handleDeleteConfirm = async () => {
     setBusy(true);
     const { error, message } = await deleteReview(profileOwnersReview.id);
@@ -61,8 +75,29 @@ export default function MovieReviews() {
     hideConfirmModal();
   };
 
+  const handleOnReviewUpdate = (review) => {
+    const updatedReview = {
+      ...profileOwnersReview,
+      rating: review.rating,
+      content: review.content,
+    };
+
+    setProfileOwnersReview({ ...updatedReview });
+
+    const newReviews = reviews.map((r) => {
+      if (r.id === updatedReview.id) return updatedReview;
+      return r;
+    });
+
+    setReviews([...newReviews]);
+  };
+
   const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
+  const hideEditModal = () => {
+    setShowEditModal(false);
+    setSelectedReview(null);
+  };
 
   useEffect(() => {
     if (movieId) fetchReviews();
@@ -96,7 +131,7 @@ export default function MovieReviews() {
               <button onClick={displayConfirmModal} type="button">
                 <BsTrash />
               </button>
-              <button type="button">
+              <button onClick={handleOnEditClick} type="button">
                 <BsPencilSquare />
               </button>
             </div>
@@ -117,6 +152,13 @@ export default function MovieReviews() {
         busy={busy}
         title="Are you sure?"
         subtitle="This action will remove this review permanently."
+      />
+
+      <EditRatingModal
+        visible={showEditModal}
+        initialState={selectedReview}
+        onSuccess={handleOnReviewUpdate}
+        onClose={hideEditModal}
       />
     </div>
   );

@@ -37,3 +37,17 @@ export const deleteReview = async (reviewId) => {
     return catchError(error);
   }
 };
+
+export const updateReview = async (reviewId, reviewData) => {
+  const token = getToken();
+  try {
+    const { data } = await client.patch(`/review/${reviewId}`, reviewData, {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
